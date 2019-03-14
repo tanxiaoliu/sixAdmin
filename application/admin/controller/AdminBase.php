@@ -1,6 +1,6 @@
 <?php
 /**
- * 后台主控
+ * Created by PhpStorm.
  * User: tanhuaxin
  * Date: 2019/3/13
  * Time: 下午10:58
@@ -10,6 +10,7 @@ namespace app\admin\controller;
 
 use think\Controller;
 
+//后台主控
 class AdminBase extends Controller
 {
     function _initialize()

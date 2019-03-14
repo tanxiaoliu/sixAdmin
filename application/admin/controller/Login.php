@@ -1,6 +1,6 @@
 <?php
 /**
- * 后台登陆
+ * Created by PhpStorm.
  * User: tanhuaxin
  * Date: 2019/3/13
  * Time: 下午10:58
@@ -12,6 +12,7 @@ use think\captcha\Captcha;
 use think\Controller;
 use think\Cookie;
 
+//后台登陆
 class Login extends Controller
 {
 
