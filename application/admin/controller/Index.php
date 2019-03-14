@@ -1,15 +1,15 @@
 <?php
+namespace app\admin\controller;
+
 /**
  * Created by PhpStorm.
  * User: tanhuaxin
  * Date: 2019/3/13
  * Time: 下午10:54
  */
-
-namespace app\admin\controller;
-
-class Index extends AdminBase
+class Index extends Controller
 {
+
     /**
      * 后台主页
      */
