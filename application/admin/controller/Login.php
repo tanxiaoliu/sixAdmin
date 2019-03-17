@@ -1,6 +1,7 @@
 <?php
 namespace app\admin\controller;
 
+use app\admin\model\User;
 use think\captcha\Captcha;
 use think\Cookie;
 use think\Session;
@@ -13,6 +14,13 @@ use think\Session;
  */
 class Login extends Controller
 {
+    function test(){
+        $data['user_name'] = 'test';
+        $data['nickname'] = '超级管理员';
+        $data['password'] = password_hash('test', PASSWORD_DEFAULT);
+        model('User')->save($data);
+        echo '插入成功';
+    }
 
     /**
      * 登陆
@@ -21,37 +29,32 @@ class Login extends Controller
     function index()
     {
         if ($this->request->isPost()) {
-            $post = $this->postData('User');
+            $post = $this->request->post();
             if (!captcha_check($post['captcha'])) {
-                $this->error('验证码不正确');
+                return $this->renderError('验证码不正确');
             }
-            if (empty($post['username']) || empty($post['password'])) {
-                $this->error('用户名或密码不能为空');
+            if (empty($post['user_name']) || empty($post['password'])) {
+                return $this->renderError('用户名或密码不能为空');
             }
             //查询用户
-            $user = [];
-            if (empty($user) || $user['state'] == 1) {
-                $this->error('登录失败, 用户名或密码错误');
+            $user = model('User')->getUserByUserName($post['user_name']);
+            if (empty($user) || $user['status'] == 1) {
+                return $this->renderError('登录失败, 用户名或密码错误');
             }
-            if (password_verify($post['password'], $user['password'])) {
-                //设置登陆操作
-                if (1) {
-                    // 保存登录状态
-                    Session::set('admin_user', [
-                        'user' => [
-                            'user_id' => $user['id'],
-                            'user_name' => $user['user_name'],
-                        ],
-                        'is_login' => true,
-                    ]);
-                    //记住密码7天
-                    $post['remember'] == 1 ? Cookie::set('user_name', $user['user_name'], 302400) : Cookie::clear('user_');
-                    $this->success('登录成功', '/admin_bs/index/index');
-                } else {
-                    $this->error('登录失败');
-                }
+//            if (password_verify($post['password'], $user['password'])) {
+            if (1) {
+                // 保存登录状态
+                Session::set('admin_user', [
+                    'user' => [
+                        'user_id' => $user['id'],
+                        'nickname' => $user['nickname'],
+                    ]
+                ]);
+                //记住密码7天
+                $post['remember'] == 1 ? Cookie::set('user_name', $post['user_name'], 302400) : Cookie::clear('user_');
+                return $this->renderSuccess('登录成功', '/admin/index/index');
             } else {
-                $this->error('登录失败, 用户名或密码错误');
+                return $this->renderError('登录失败, 用户名或密码错误');
             }
         } else {
             $userName = Cookie::get('user_name');
@@ -77,6 +80,7 @@ class Login extends Controller
      */
     function captcha()
     {
+        ob_clean();
         $config = [
             'codeSet' => '0123456789',
             'length' => 4

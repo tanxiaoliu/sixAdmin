@@ -1,0 +1,169 @@
+{include file="admin@public/header" /}
+<body class="layui-layout-body"><div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <!-- 头部区域 -->
+        <ul class="layui-nav layui-layout-left">
+           <!--  <li class="layui-nav-item layadmin-flexible" lay-unselect="">
+                <a href="javascript:;" layadmin-event="flexible" title="侧边伸缩">
+                    <i class="layui-icon layui-icon-shrink-right" id="LAY_app_flexible"></i>
+                </a>
+            </li> -->
+            <li class="layui-nav-item layui-hide-xs" lay-unselect="">
+                <a href="{:url('web/index/index')}" target="_blank">
+                    <i class="layui-icon layui-icon-website"></i> 网站
+                </a>
+            </li>
+            <li class="layui-nav-item" lay-unselect="">
+                <a href="javascript:refresh();">
+                    <i class="layui-icon layui-icon-refresh"></i> 刷新
+                </a>
+            </li>
+        </ul>
+        <ul class="layui-nav layui-layout-right" lay-filter="layadmin-layout-right">
+            <li class="layui-nav-item" lay-unselect="">
+                <a href="javascript:;"><i class="layui-icon layui-icon-username"></i> {$user.nickname}</a>
+            </li>
+            <li class="layui-nav-item" lay-unselect="">
+                <a href="javascript:logout();">退出</a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- 侧边菜单 -->
+    <div class="layui-side layui-side-menu">
+        <div class="layui-side-scroll">
+            <div class="layui-logo" lay-href=""> <span>xx-管理后台</span> </div>
+            <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
+            </ul>
+        </div>
+    </div>
+
+
+    <!-- 页面标签 -->
+    <div class="layui-tab" lay-unauto="" lay-allowclose="true" lay-filter="layadmin-layout-tabs">
+        <ul class="layui-tab-title layadmin-pagetabs" id="LAY_app_tabsheader">
+            <li lay-id="/" class="layui-this"><i class="layui-icon layui-icon-home"></i></li>
+        </ul>
+        <!-- tabcontent内容 -->
+        <div class="layui-body layui-tab-content" id="LAY_app_body">
+            <div class="layui-tab-item layui-show">
+              <iframe src="/sixAdmin/public/admin/index/home"></iframe>
+            </div>
+        </div>
+        <!-- tabcontent end -->
+    </div>
+
+
+    <!-- 辅助元素，一般用于移动设备下遮罩 -->
+    <div class="layadmin-body-shade" layadmin-event="shade"></div>
+</div>
+
+<!-- 菜单模版 -->
+<script type="text/html" id="navTpl">
+    {{#  layui.each(d, function(index, item){ }}
+    <li class="layui-nav-item">
+        <a href="javascript:;">
+            <i class="layui-icon layui-icon-{{d[index].icon}}"></i>
+            <cite>{{item.navname}}</cite>
+            <span class="layui-nav-more"></span></a>
+        <dl class="layui-nav-child">
+            {{#  layui.each(item.navlist, function(index, item){ }}
+            <dd><a href="javascript:;" data-url="/sixAdmin/public{{item.uri}}">{{item.name}}</a></dd>
+            {{#  }); }}
+        </dl>
+    </li>
+    {{#  }); }}
+</script>
+
+<script>
+    var form,element,layer,layedit,table,laydate;
+    var tabArray = new Array();
+    layui.use(['form','layer','table','element','laytpl','layedit','laydate'], function(){
+      element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+      layer = layui.layer;
+      form = layui.form;
+      layedit = layui.layedit;
+      table = layui.table;
+      laydate = layui.laydate;
+      var laytpl = layui.laytpl;
+
+    //左侧菜单
+    var navdata = {$menus};
+    var getTpl = navTpl.innerHTML, navdom = document.getElementById('LAY-system-side-menu');
+    laytpl(getTpl).render(navdata, function(html){
+      navdom.innerHTML = html;
+      element.render('nav');
+    });
+
+    //打开页面
+    $(".layui-nav-child a").click(function(){
+      var _this=$(this);
+      var title = _this.text();
+      var url = _this.attr('data-url');
+      open_tab(title, url);
+    });
+
+    //监听页面关闭
+    element.on('tabDelete(layadmin-layout-tabs)', function(data){
+      tabArray.splice(data.index-1,1);
+    });
+
+    });
+
+    //退出
+    function logout(){
+        $.ajax({
+            type:'POST',
+            url:'{:url("admin/login/logout")}',
+            dataType:'json',
+            data:{},
+            success:function(data){
+                if(data.code == 0){
+                    layer.msg(data.msg, {icon: 6,time:1000}, function(index){
+                        layer.close(index);
+                        window.location.href = data.url;
+                    });
+                }
+            }
+        });
+    }
+
+    //刷新
+    function refresh() {
+        var dom = $('.layui-tab-item.layui-show').find("iframe");
+        if(!dom[0]) return;
+        var refreshing = layer.load();
+        var src = dom.prop('src');
+        dom.prop('src',src);
+        dom[0].onload = function(){
+            layer.close(refreshing);
+        }
+    }
+
+    //打开选项卡
+    function open_tab(title,url){
+      if($.inArray(title,tabArray) == -1){
+          tabArray.push(title);
+          var iframeID = tabArray.length;
+          var loading = layer.load(); //加载动画
+          element.tabAdd('layadmin-layout-tabs', {
+              title: title,
+              content: '<iframe src="'+url+'" id="iframe'+iframeID+'"></iframe>',
+              id: title
+          });
+          element.tabChange('layadmin-layout-tabs',title);
+
+          //关掉加载动画
+          var iframe = document.getElementById('iframe'+iframeID);
+          iframe.onload = function(){     
+            layer.close(loading);
+          };
+
+      }else{
+        element.tabChange('layadmin-layout-tabs',title);
+      }
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,215 @@
+{include file="admin@public/header" /}
+<style type="text/css">
+    .layui-table-cell{
+        height: auto;
+    }
+</style>
+<body>
+<div class="layui-fluid">
+    <div class="layui-row">
+        <div class="layui-card" id="table">
+            <div class="layui-card-form layui-clear">
+                <!-- 功能按钮。注意代码，两个button间不能空格 -->
+                <div class="btn-content">
+                    <div class="layui-btn-group">
+                        <button class="layui-btn layui-btn-primary layui-btn-sm bianji">编辑</button>
+                        <button class="layui-btn layui-btn-primary layui-btn-sm delete">删除</button>
+                        <button class="layui-btn layui-btn-primary layui-btn-sm tg">通过</button>
+                        <button class="layui-btn layui-btn-primary layui-btn-sm btg">驳回</button>
+                        <button class="layui-btn layui-btn-primary layui-btn-sm px">建模排序</button>
+                    </div>
+                     <div class="layui-btn-group">
+                        <a><button class="layui-btn layui-btn-primary layui-btn-sm daodu">导读</button>
+                        <button class="layui-btn layui-btn-primary layui-btn-sm xiangguan">相关文章</button>
+                    </div>
+                </div>
+
+                <!-- 筛选区 -->
+                <div class="search-content">
+                    <input type="text" class="layui-input-inline layui-input" id="create_time" name="create_time" placeholder="开始日期 - 结束日期" style="width: 172px">
+                    <select name="project_type" id="project_type">
+                        <option value="">类型</option>
+                        <option value="0">免费</option>
+                        <option value="1">专业</option>
+                    </select>
+                    <select name="model_state" id="model_state">
+                        <option value="">建模状态</option>
+                        <option value="0" {eq name="modelState" value="0"}selected{/eq}>未建模</option>
+                        <option value="1" {eq name="modelState" value="1"}selected{/eq}>排队中</option>
+                        <option value="2" {eq name="modelState" value="2"}selected{/eq}>建模完成</option>
+                        <option value="3" {eq name="modelState" value="3"}selected{/eq}>建模失败</option>
+                    </select>
+                    <select name="review_state" id="review_state">
+                        <option value="">审核状态</option>
+                        <option value="0" {eq name="reviewState" value="0"}selected{/eq}>待审核</option>
+                        <option value="1" {eq name="reviewState" value="1"}selected{/eq}>审核通过</option>
+                        <option value="2" {eq name="reviewState" value="2"}selected{/eq}>审核驳回</option>
+                    </select>
+                    <select lay-filter="aihao" id="tags" name="tags" style="width: 80px">
+                        <option value="" selected="selected">分类</option>
+                        <option value="0">古遗迹</option>
+                        <option value="1">古墓葬</option>
+                        <option value="2">古建筑</option>
+                        <option value="3">石窟寺及石刻</option>
+                        <option value="4">近现代重要</option>
+                        <option value="5">可移动文物</option>
+                        <option value="6">其它</option>
+                    </select>
+                    <div class="search-input-group">
+                        <select name="search_type" id="search_type">
+                            <option value="0">搜项目名</option>
+                            <option value="1">搜用户名</option>
+                            <option value="2">搜手机号</option>
+                        </select><input type="text" class="layui-input-inline layui-input" id="keyword" name="keyword">
+                    </div>
+                    <button class="layui-btn layui-btn-sm search" onclick="search(1)">确定</button>
+                </div>
+
+            </div>
+            <div class="layui-card-body">
+                <table class="layui-table" id="test_id"></table>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="thumbTpl">
+    <a href="{:url('web/model/modeldetail')}?id={{d.id}}&type=2" target="_blank">
+        {{#  if(d.model_state == 'Done'){ }}
+            <img src="{:config('qiniu.url')}{{d.cover}}?v=1" width="60" height="60">
+        {{#  } else { }}
+            <img src="__STATIC__/web/images/thum.jpg" width="60" height="60">
+        {{#  } }}
+    </a>
+</script>
+<script type="text/html" id="projectTpl">
+        {{d.project_name}}
+        <div class="project_name" style="line-height: 22px;">
+        <span class="layui-badge-rim">{{d.project_type_name}}</span>
+        <span class="layui-badge-rim">{{d.visibility_name}}</span>
+        {{#  if(d.is_featured == 0){ }}
+        <span class="layui-badge-rim" style="color: #F581B1;">精选</span>
+        {{#  } }}
+        <span class="layui-badge-rim"><i class="layui-icon layui-icon-tupian"></i> {{d.image_num}} / {{d.giga_pixel}}GP</span>
+        </div>
+        <div class="project_name" style="line-height: 22px;">
+            {{# if(d.introduction_count){ }}
+            <span class="layui-badge-rim"><i class="layui-icon layui-icon-read"></i> 导读</span>
+            {{# } }}
+            <span class="layui-badge-rim"><i class="layui-icon layui-icon-search"></i> {{d.views}}</span>
+            <span class="layui-badge-rim"><i class="layui-icon layui-icon-praise"></i> {{d.fabulous}}</span>
+        </div>
+</script>
+<script type="text/html" id="userTpl">
+    <i class="layui-icon layui-icon-username"></i>{{d.user_name}}
+</script>
+<script type="text/html" id="stateTpl">
+    {{d.model_state_name}}{{d.modeling_sort}}
+</script>
+<script type="text/javascript">
+    var curr_page;
+    //搜索
+    function search(curr) {
+        var create_time = $('#create_time').val();
+        var project_type = $('#project_type').val();
+        var model_state = $('#model_state').val();
+        var review_state = $('#review_state').val();
+        var tags = $('#tags').val();
+        var search_type = $('#search_type').val();
+        var keyword = $('#keyword').val();
+        //执行重载
+        table.reload('test_id', {page: {curr: curr}, where: {create_time:create_time, project_type: project_type, model_state:model_state, review_state:review_state, tags:tags, keyword:keyword, search_type:search_type}});
+    };
+    layui.use(['laydate', 'table'], function() {
+        var laydate = layui.laydate;
+        var table = layui.table;
+
+        //日期范围
+        laydate.render({
+            elem: '#create_time', range: true
+        });
+
+        table.render({
+            elem: '#test_id'
+            ,url: '/admin_bs/Project/getList?review_state={$reviewState}&model_state={$modelState}'
+            ,page: true //开启分页
+            ,cols: [[ //表头
+                {type:'checkbox'}
+                ,{field: 'id', title: 'ID', width:60}
+                ,{field: 'thumb', title: '封面', width:80, templet: '#thumbTpl'}
+                ,{field: 'project_id', title: '项目ID'}
+                ,{field: 'project_name', title: '项目名称', width:250, templet: '#projectTpl'}
+                ,{field: 'user_name', title: '用户', templet: '#userTpl', width:120}
+                ,{field: 'tags', title: '分类'}
+                ,{field: 'create_time', title: '创建时间', width:155}
+                ,{field: 'modeling_date', title: '建模时间', width:155}
+                ,{field: 'model_state_name', title: '建模状态', width:100, templet:'#stateTpl'}
+                ,{field: 'review_state_name', title: '审核状态'}
+            ]],
+            done: function (res, curr, count) {
+                curr_page = curr;
+            }
+        });
+
+        //编辑
+        $("#table .bianji").click(function () {
+            var checkStatus = table.checkStatus('test_id'), data = checkStatus.data;
+            if (data.length == 1) {
+                var id = data[0]['id'];
+                var project_name = data[0]['project_name'];
+                edit("{:url('/admin_bs/Project/add/id/" + id + "')}", project_name);
+            }
+        });
+
+        //导读
+        $("#table .daodu").click(function () {
+            var checkStatus = table.checkStatus('test_id'), data = checkStatus.data;
+            if (data.length == 1) {
+                var id = data[0]['id'];
+                var project_name = data[0]['project_name'];
+                window.open("{:url('/admin_bs/Project/daodu/id/" + id + "/project_name/" + project_name + "')}");
+            }
+        });
+
+        //相关文章
+        $("#table .xiangguan").click(function () {
+            var checkStatus = table.checkStatus('test_id'), data = checkStatus.data;
+            if (data.length == 1) {
+                var id = data[0]['id'];
+                var project_name = data[0]['project_name'];
+                layer.open({
+                    title: project_name+'的相关文章',
+                    type: 2,
+                    area: ['600px','460px'],
+                    content: ["{:url('/admin_bs/Project/xiangguan/id/" + id + "')}"]
+                })
+            }
+        });
+
+        //删除
+        $("#table .delete").click(function () {
+            deleted("{:url('admin_bs/Project/delete')}", '确定删除？', 1);
+        });
+
+        //通过
+        $("#table .tg").click(function () {
+            deleted("{:url('/admin_bs/Project/shenhe/review_state/1')}", '确定全部审核通过？', 1);
+        });
+
+        //驳回
+        $("#table .btg").click(function () {
+            deleted("{:url('/admin_bs/Project/shenhe/review_state/2')}", '确定全部审核驳回？', 1);
+        });
+
+        //排序
+        $("#table .px").click(function () {
+            var checkStatus = table.checkStatus('test_id'), data = checkStatus.data;
+            if (data.length == 1) {
+                var id = data[0]['id'];
+                var modeling_sort = data[0]['modeling_sort'];
+                edit("{:url('/admin_bs/Project/paixu/id/" + id + "/modeling_sort/"+modeling_sort+"')}", '调整顺序');
+            }
+        });
+    });
+</script>
+</body>
+</html>

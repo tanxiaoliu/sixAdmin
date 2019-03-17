@@ -7,21 +7,20 @@ namespace app\admin\controller;
  * Date: 2019/3/13
  * Time: 下午10:54
  */
-class Index extends Controller
+class Project extends Controller
 {
-    /**
-     * layout
-     * @return \think\response\View
-     */
-    function index()
+
+    function lists()
     {
         return view();
     }
 
-    /**
-     * 后台主页
-     */
-    function home()
+    function add()
+    {
+        return view();
+    }
+
+    function projectView()
     {
         return view();
     }

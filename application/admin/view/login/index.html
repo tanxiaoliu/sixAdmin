@@ -9,8 +9,8 @@
             </div>
             <div class="layadmin-user-login-box layadmin-user-login-body layui-form">
                 <div class="layui-form-item">
-                    <label class="layadmin-user-login-icon layui-icon layui-icon-username" for="username"></label>
-                    <input type="text" name="username" id="username" lay-verify="required" placeholder="用户名" class="layui-input" value="{$username|default=''}">
+                    <label class="layadmin-user-login-icon layui-icon layui-icon-username" for="user_name"></label>
+                    <input type="text" name="user_name" id="user_name" lay-verify="required" placeholder="用户名" class="layui-input" value="{$username|default=''}">
                 </div>
                 <div class="layui-form-item">
                     <label class="layadmin-user-login-icon layui-icon layui-icon-password" for="password"></label>
@@ -70,8 +70,8 @@
 
     //提交登录
     $('#loginSubmit').click(function(){
-        var username = $.trim($('#username').val());
-        if (!username) {
+        var user_name = $.trim($('#user_name').val());
+        if (!user_name) {
             layer.msg('请填写用户名', {icon: 2, time : 1500});
             return false;
         }
@@ -92,7 +92,7 @@
             url:'{:url("admin/login/index")}',
             dataType:'json',
             data:{
-                username: username,
+                user_name: user_name,
                 password: password,
                 captcha: captcha,
                 remember:remember

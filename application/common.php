@@ -13,6 +13,38 @@
 use think\Request;
 
 /**
+ * ajax成功返回json数据
+ * @param string $msg
+ * @param string $url
+ * @param array $data
+ * @return \think\response\Json
+ */
+function ajax_success($msg = '操作成功', $url = '', $data = array())
+{
+    $tmp['code'] = 0;
+    $tmp['msg'] = $msg;
+    $tmp['url'] = $url;
+    $tmp['data'] = $data;
+    return json($tmp);
+}
+
+/**
+ * ajax失败返回json数据
+ * @param string $msg
+ * @param string $url
+ * @param array $data
+ * @return \think\response\Json
+ */
+function ajax_error($msg = '操作失败', $url = '', $data = array())
+{
+    $tmp['code'] = 1;
+    $tmp['msg'] = $msg;
+    $tmp['url'] = $url;
+    $tmp['data'] = $data;
+    return json($tmp);
+}
+
+/**
  * 打印调试函数
  * @param $content
  * @param $is_die
