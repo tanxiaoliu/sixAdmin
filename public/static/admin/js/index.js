@@ -10,55 +10,34 @@ layui.use(['form','layer','table','element','laytpl'], function(){
 /**
  * 删除的公共方法
  * @param url
- * @returns {boolean}
+ * @param obj
  */
-function deleted(url, str, url_data) {
-    var checkStatus = table.checkStatus('test_id'), data = checkStatus.data;
-    if (data.length > 0) {
-        if (data.length == 1) {
-            var id = data[0]['id'];
-        } else {
-            var id = '';
-            for (var i = 0; i < data.length; i++) {
-                id += data[i]['id'] + ',';
-            }
-            id = id.substring(0, id.length - 1);
-        }
-        layer.open({
-            title: '信息',
-            type: 1,
-            content: '<div style="padding: 20px 100px;">'+str+'</div>',
-            btn: ['确定', '取消'],
-            yes: function () {
-                layer.closeAll();
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    dataType: 'json',
-                    data: {
-                        id: id
-                    },
-                    success: function (data) {
-                         if(data.code == 0){
-                            layer.msg(data.msg,{icon:1,time:2000}, function(){
-                                layer.closeAll();
-                                if(url_data == 1){
-                                    $(".search").click();
-                                } else {
-                                    location.reload();
-                                }
-                            })
-                        } else{
-                             layer.msg(data.msg,{icon:2,time:2000})
-                        }
-                    }
-                });
+function deleted(url, obj) {
+    obj.del();
+    layer.confirm('真的删除行么', function(index){
+        $.ajax({
+            type: 'POST',
+            url: url,
+            dataType: 'json',
+            data: {
+                id: obj.data.id
             },
-            btn2: function () {
+            success: function (data) {
+                if(data.code == 0){
+                    layer.msg(data.msg,{icon:1,time:2000}, function(){
+                        layer.closeAll();
+                        // if(url_data == 1){
+                        //     $(".search").click();
+                        // } else {
+                        //     location.reload();
+                        // }
+                    })
+                } else{
+                    layer.msg(data.msg,{icon:2,time:2000})
+                }
             }
         });
-    }
-    return false;
+    });
 }
 
 /**

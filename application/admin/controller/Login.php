@@ -52,7 +52,7 @@ class Login extends Controller
                 ]);
                 //记住密码7天
                 $post['remember'] == 1 ? Cookie::set('user_name', $post['user_name'], 302400) : Cookie::clear('user_');
-                return $this->renderSuccess('登录成功', '/admin/index/index');
+                return $this->renderSuccess('登录成功', '/admin/Index/index');
             } else {
                 return $this->renderError('登录失败, 用户名或密码错误');
             }
@@ -71,7 +71,7 @@ class Login extends Controller
     function logout()
     {
         Session::clear('admin_user');
-        $this->redirect('login/index');
+        $this->redirect('Login/index');
     }
 
     /**

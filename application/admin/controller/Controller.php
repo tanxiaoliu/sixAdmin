@@ -32,10 +32,10 @@ class Controller extends \think\Controller
     /* @var array $allowAllAction 登录验证白名单 */
     protected $allowAllAction = [
         // 登录页面
-        'admin/login/index',
-        'admin/login/logout',
-        'admin/login/captcha',
-        'admin/login/test',
+        'admin/Login/index',
+        'admin/Login/logout',
+        'admin/Login/captcha',
+        'admin/Login/test',
     ];
 
     /**
@@ -90,7 +90,7 @@ class Controller extends \think\Controller
 
         // 验证当前模块是否是admin
         if ($this->request->module() != 'admin' || !Session::has('admin_user')) {
-            $this->redirect('login/index');
+            $this->redirect('Login/index');
             return false;
         }
 
@@ -109,7 +109,7 @@ class Controller extends \think\Controller
                 dump($this->routeUri);
                 return true;
             }
-            $this->redirect('login/index');
+            $this->redirect('Login/index');
             return false;
         }
     }

@@ -47,7 +47,7 @@
         <!-- tabcontent内容 -->
         <div class="layui-body layui-tab-content" id="LAY_app_body">
             <div class="layui-tab-item layui-show">
-              <iframe src="/sixAdmin/public/admin/index/home"></iframe>
+              <iframe src="/admin/Index/home"></iframe>
             </div>
         </div>
         <!-- tabcontent end -->
@@ -68,7 +68,7 @@
             <span class="layui-nav-more"></span></a>
         <dl class="layui-nav-child">
             {{#  layui.each(item.navlist, function(index, item){ }}
-            <dd><a href="javascript:;" data-url="/sixAdmin/public{{item.uri}}">{{item.name}}</a></dd>
+            <dd><a href="javascript:;" data-url="{{item.uri}}">{{item.name}}</a></dd>
             {{#  }); }}
         </dl>
     </li>
@@ -114,7 +114,7 @@
     function logout(){
         $.ajax({
             type:'POST',
-            url:'{:url("admin/login/logout")}',
+            url:'{:url("admin/Login/logout")}',
             dataType:'json',
             data:{},
             success:function(data){

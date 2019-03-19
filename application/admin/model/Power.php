@@ -2,22 +2,53 @@
 namespace app\admin\model;
 
 use think\Model;
+use traits\model\SoftDelete;
 
 /**
- * Created by PhpStorm.
+ * 权限模型
  * User: Administrator
  * Date: 2019/3/17 0017
  * Time: 下午 7:28
  */
 class Power extends Model
 {
+    use SoftDelete;
+//    protected $deleteTime = 'delete_time';
+    protected $autoWriteTimestamp = true;
+
+    /**
+     * 获取列表
+     * @param array $map
+     * @param int $page
+     * @param int $limit
+     * @param string $order
+     * @return false|\PDOStatement|string|\think\Collection
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
+    function getList($map = array(), $page = 1, $limit = 20, $order = 'id desc')
+    {
+        return $this->where($map)->page($page, $limit)->order($order)->select();
+    }
+
+    /**
+     * 获取数量
+     * @param array $map
+     * @return int|string
+     * @throws \think\Exception
+     */
+    public function countList($map = array())
+    {
+        return $this->where($map)->count();
+    }
+
     /**
      * 获取树形菜单列表
      * @return array
      */
     function getTreeList()
     {
-        $map['status'] = 0;
         $map['type'] = 0;
         $map['parent_id'] = 0;
         $listOne = $this->where($map)->order('sort')->select();
@@ -113,5 +144,15 @@ class Power extends Model
 //            }
 //        }
         return array_values($authority);
+    }
+
+    /**
+     * 根据ID删除
+     * @param $id
+     * @return int
+     */
+    function deleteById($id)
+    {
+        return self::destroy($id);
     }
 }

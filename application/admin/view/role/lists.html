@@ -1,0 +1,88 @@
+{include file="admin@public/header" /}
+<style type="text/css">
+    .layui-table-cell{
+        height: auto;
+    }
+</style>
+<body>
+<div class="layui-fluid">
+    <div class="layui-row">
+        <div class="layui-card" id="table">
+            <div class="layui-card-form layui-clear">
+                <!-- 功能按钮。注意代码，两个button间不能空格 -->
+                <div class="btn-content">
+                    <div class="layui-btn-group">
+                        <button class="layui-btn layui-btn-primary layui-btn-sm add">新增</button>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card-body">
+                <table class="layui-table" id="test" lay-filter="test"></table>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="statusTpl">
+    {{#  if(d.status == 0){ }}
+    正常
+    {{#  } else { }}
+    禁用
+    {{#  } }}
+</script>
+<script type="text/html" id="optTpl">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script type="text/javascript">
+    var curr_page;
+    //搜索
+    function search(curr) {
+        var create_time = $('#create_time').val();
+        var project_type = $('#project_type').val();
+        var model_state = $('#model_state').val();
+        var review_state = $('#review_state').val();
+        var tags = $('#tags').val();
+        var search_type = $('#search_type').val();
+        var keyword = $('#keyword').val();
+        //执行重载
+        table.reload('test', {page: {curr: curr}, where: {create_time:create_time, project_type: project_type, model_state:model_state, review_state:review_state, tags:tags, keyword:keyword, search_type:search_type}});
+    }
+
+    layui.use(['laydate', 'table'], function() {
+        var table = layui.table;
+
+        table.render({
+            elem: '#test'
+            ,url: '/admin/Role/getList'
+            ,page: true //开启分页
+            ,cols: [[ //表头
+                {field: 'id', title: 'ID', width:60}
+                ,{field: 'role_name', title: '角色名称'}
+                ,{field: 'remark', title: '备注'}
+                ,{field: 'status', title: '状态', templet: '#statusTpl'}
+                ,{field: 'create_time', title: '创建时间'}
+                ,{fixed: 'right', title:'操作', toolbar: '#optTpl', width:150}
+            ]],
+            done: function (res, curr, count) {
+                curr_page = curr;
+            }
+        });
+
+        //新增
+        $("#table .add").click(function () {
+            edit("{:url('/admin/Role/add')}", '新增角色');
+        });
+
+        //监听行工具事件
+        table.on('tool(test)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'del'){
+                deleted("{:url('admin/Role/delete')}", obj)
+            } else if(obj.event === 'edit'){
+                edit("{:url('/admin/Role/add/id/"+ data.id +"')}", '编辑' + data.role_name);
+            }
+        });
+    });
+</script>
+</body>
+</html>

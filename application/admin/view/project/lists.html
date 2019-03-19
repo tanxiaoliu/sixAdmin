@@ -12,24 +12,18 @@
                 <!-- 功能按钮。注意代码，两个button间不能空格 -->
                 <div class="btn-content">
                     <div class="layui-btn-group">
-                        <button class="layui-btn layui-btn-primary layui-btn-sm bianji">编辑</button>
-                        <button class="layui-btn layui-btn-primary layui-btn-sm delete">删除</button>
+                        <button class="layui-btn layui-btn-primary layui-btn-sm add">新增</button>
                     </div>
                 </div>
 
                 <!-- 筛选区 -->
                 <div class="search-content">
-                    <input type="text" class="layui-input-inline layui-input" id="create_time" name="create_time" placeholder="开始日期 - 结束日期" style="width: 172px">
-                    <select name="project_type" id="project_type">
-                        <option value="">类型</option>
-                        <option value="0">免费</option>
-                        <option value="1">专业</option>
-                    </select>
+                    <!--<input type="text" class="layui-input-inline layui-input" id="create_time" name="create_time" placeholder="开始日期 - 结束日期" style="width: 172px">-->
                     <div class="search-input-group">
                         <select name="search_type" id="search_type">
                             <option value="0">搜项目名</option>
                             <option value="1">搜用户名</option>
-                            <option value="2">搜手机号</option>
+                            <option value="2">标签</option>
                         </select><input type="text" class="layui-input-inline layui-input" id="keyword" name="keyword">
                     </div>
                     <button class="layui-btn layui-btn-sm search" onclick="search(1)">确定</button>
@@ -37,25 +31,24 @@
 
             </div>
             <div class="layui-card-body">
-                <table class="layui-table" id="test_id"></table>
+                <table class="layui-table" id="test" lay-filter="test"></table>
             </div>
         </div>
     </div>
 </div>
 <script type="text/html" id="thumbTpl">
-    <a href="{:url('web/model/modeldetail')}?id={{d.id}}&type=2" target="_blank">
-        {{#  if(d.model_state == 'Done'){ }}
-            <img src="{:config('qiniu.url')}{{d.cover}}?v=1" width="60" height="60">
-        {{#  } else { }}
-            <img src="__STATIC__/web/images/thum.jpg" width="60" height="60">
-        {{#  } }}
-    </a>
+    {{#  if(d.cover){ }}
+    <img src="__STATIC__{{d.cover}}?v=1" width="60" height="60">
+    {{#  } else { }}
+    <img src="__STATIC__/admin/images/default.jpg" width="60" height="60">
+    {{#  } }}
 </script>
 <script type="text/html" id="userTpl">
-    <i class="layui-icon layui-icon-username"></i>{{d.user_name}}
+    <i class="layui-icon layui-icon-username"></i>{{d.member_name}}
 </script>
-<script type="text/html" id="stateTpl">
-    {{d.model_state_name}}{{d.modeling_sort}}
+<script type="text/html" id="optTpl">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 <script type="text/javascript">
     var curr_page;
@@ -69,52 +62,52 @@
         var search_type = $('#search_type').val();
         var keyword = $('#keyword').val();
         //执行重载
-        table.reload('test_id', {page: {curr: curr}, where: {create_time:create_time, project_type: project_type, model_state:model_state, review_state:review_state, tags:tags, keyword:keyword, search_type:search_type}});
-    };
+        table.reload('test', {page: {curr: curr}, where: {create_time:create_time, project_type: project_type, model_state:model_state, review_state:review_state, tags:tags, keyword:keyword, search_type:search_type}});
+    }
     layui.use(['laydate', 'table'], function() {
-        var laydate = layui.laydate;
+        // var laydate = layui.laydate;
         var table = layui.table;
 
         //日期范围
-        laydate.render({
-            elem: '#create_time', range: true
-        });
+        // laydate.render({
+        //     elem: '#create_time', range: true
+        // });
 
         table.render({
-            elem: '#test_id'
-            ,url: '/admin_bs/Project/getList?review_state={$reviewState}&model_state={$modelState}'
+            elem: '#test'
+            ,toolbar: '#toolbar'
+            ,url: '/admin/Project/getList'
             ,page: true //开启分页
             ,cols: [[ //表头
-                {type:'checkbox'}
-                ,{field: 'id', title: 'ID', width:60}
-                ,{field: 'thumb', title: '封面', width:80, templet: '#thumbTpl'}
-                ,{field: 'project_id', title: '项目ID'}
-                ,{field: 'project_name', title: '项目名称', width:250, templet: '#projectTpl'}
-                ,{field: 'user_name', title: '用户', templet: '#userTpl', width:120}
-                ,{field: 'tags', title: '分类'}
+                // {type:'checkbox'}
+                {field: 'id', title: 'ID', width:60}
+                ,{field: 'cover', title: '封面', width:80, templet: '#thumbTpl'}
+                ,{field: 'project_name', title: '项目名称', width:250}
+                ,{field: 'path', title: '项目路径'}
+                ,{field: 'member_name', title: '所属用户', templet: '#userTpl', width:120}
+                ,{field: 'tag', title: '标签', width:80}
                 ,{field: 'create_time', title: '创建时间', width:155}
-                ,{field: 'modeling_date', title: '建模时间', width:155}
-                ,{field: 'model_state_name', title: '建模状态', width:100, templet:'#stateTpl'}
-                ,{field: 'review_state_name', title: '审核状态'}
+                ,{fixed: 'right', title:'操作', toolbar: '#optTpl', width:150}
             ]],
             done: function (res, curr, count) {
                 curr_page = curr;
             }
         });
 
-        //编辑
-        $("#table .bianji").click(function () {
-            var checkStatus = table.checkStatus('test_id'), data = checkStatus.data;
-            if (data.length == 1) {
-                var id = data[0]['id'];
-                var project_name = data[0]['project_name'];
-                edit("{:url('/admin_bs/Project/add/id/" + id + "')}", project_name);
-            }
+        //新增
+        $("#table .add").click(function () {
+            edit("{:url('/admin/Project/add')}", '新增项目');
         });
 
-        //删除
-        $("#table .delete").click(function () {
-            deleted("{:url('admin_bs/Project/delete')}", '确定删除？', 1);
+        //监听行工具事件
+        table.on('tool(test)', function(obj){
+            var data = obj.data;
+            console.log(obj);
+            if(obj.event === 'del'){
+                deleted("{:url('admin/Project/delete')}", obj)
+            } else if(obj.event === 'edit'){
+                edit("{:url('/admin/Project/add/id/"+ data.id +"')}", '编辑' + data.project_name);
+            }
         });
     });
 </script>

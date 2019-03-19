@@ -1,53 +1,37 @@
 <div class="layui-card-body" id="alert_form" style="height: 380px">
     <form class="layui-form" action="" lay-filter="alert">
         <div class="layui-form-item">
-            <label class="layui-form-label">精选</label>
-            <div class="layui-input-inline">
-                <input type="checkbox" name="is_featured" lay-skin="switch" lay-text="是|否" {eq name="data.is_featured" value="0"}checked{/eq}>
+            <label class="layui-form-label">项目名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="project_name" value="{$data.project_name|default=''}" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">分类</label>
+            <label class="layui-form-label">所属用户</label>
             <div class="layui-input-inline">
-                <select name="tags" lay-verify="required">
-                    {if condition="$data"}
-                    <option value="0" {eq name="data.tags" value="0"}selected{/eq}>古遗迹</option>
-                    <option value="1" {eq name="data.tags" value="1"}selected{/eq}>古墓葬</option>
-                    <option value="2" {eq name="data.tags" value="2"}selected{/eq}>古建筑</option>
-                    <option value="3" {eq name="data.tags" value="3"}selected{/eq}>石窟寺及石刻</option>
-                    <option value="4" {eq name="data.tags" value="4"}selected{/eq}>近现代重要</option>
-                    <option value="5" {eq name="data.tags" value="5"}selected{/eq}>可移动文物</option>
-                    <option value="6" {eq name="data.tags" value="6"}selected{/eq}>其它</option>
-                    {else /}
-                    <option value="0">古遗迹</option>
-                    <option value="1">古墓葬</option>
-                    <option value="2">古建筑</option>
-                    <option value="3">石窟寺及石刻</option>
-                    <option value="4">近现代重要</option>
-                    <option value="5">可移动文物</option>
-                    <option value="6">其它</option>
-                    {/if}
+                <select name="member_id" lay-verify="required">
+                    <option value="0">张三</option>
+                    <option value="1">李四</option>
                 </select>
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">模型公开性</label>
+            <label class="layui-form-label">标签</label>
             <div class="layui-input-block">
-                <input type="radio" name="visibility" value="0" {eq name="data.visibility" value="0"}checked{/eq} title="公开">
-                <input type="radio" name="visibility" value="1" {eq name="data.visibility" value="1"}checked{/eq} title="分享可见">
-                <input type="radio" name="visibility" value="2" {eq name="data.visibility" value="2"}checked{/eq} title="仅自己可见">
+                <input type="text" name="tag" value="{$data.tag|default=''}" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">浏览量</label>
+            <label class="layui-form-label">项目封面图</label>
             <div class="layui-input-block">
-                <input type="text" name="views" value="{$data.views|default=0}" autocomplete="off" class="layui-input">
+                <span id="fengmian"><img src="__STATIC__{$data.cover|default=''}" width="80" height="80"></span>
+                <a class="layui-btn" id="sc">上传封面</a>
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">点赞数</label>
+            <label class="layui-form-label">项目路径</label>
             <div class="layui-input-block">
-                <input type="text" name="fabulous" value="{$data.fabulous|default=0}" autocomplete="off" class="layui-input">
+                <input type="text" name="path" value="{$data.path|default=''}" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
@@ -59,36 +43,63 @@
     </form>
 </div>
 <script>
-    //监听提交
-    form.on('submit(save)', function(obj){
-        var post = obj.field;
-        $.ajax({
-            type:'POST',
-            url:'{:url("admin_bs/project/save")}',
-            dataType:'json',
-            data:{
-                is_featured:post.is_featured,
-                tags:post.tags,
-                visibility:post.visibility,
-                views:post.views,
-                fabulous:post.fabulous,
-                id:"{$data.id|default=''}"
-            },
-            success:function(data){
-                if(data.code == 0){
-                    layer.msg(data.msg,{icon:1,time:2000}, function(){
-                        layer.closeAll();
-                        search(curr_page);
-                    })
-                } else{
-                     layer.msg(data.msg,{icon:2,time:2000})
+    layui.use(['form','table','upload'], function() {
+        var upload = layui.upload;
+        var cover = "{$data.cover|default=''}";
+
+        //监听提交
+        form.on('submit(save)', function (obj) {
+            if(cover == ''){
+                layer.msg('请上传项目封面', {icon: 2, time: 2000});
+                return false;
+            }
+            var post = obj.field;
+            $.ajax({
+                type: 'POST',
+                url: '{:url("admin/Project/save")}',
+                dataType: 'json',
+                data: {
+                    post:post,
+                    cover: cover,
+                    id: "{$data.id|default=''}"
+                },
+                success: function (data) {
+                    if (data.code == 0) {
+                        layer.msg(data.msg, {icon: 1, time: 2000}, function () {
+                            layer.closeAll();
+                            search(curr_page);
+                        })
+                    } else {
+                        layer.msg(data.msg, {icon: 2, time: 2000})
+                    }
+                },
+                error: function (jqXHR) {
+                    layer.alert('提交失败');
                 }
-            },
-            error:function(jqXHR){
-                layer.alert('提交失败');
+            });
+            return false;
+        });
+
+        //上传图片
+        upload.render({
+            elem: '#sc',
+            url: "{:url('/admin/project/upload')}"
+            , before: function (obj) {
+                layer.load(); //上传loading
+            }
+            , done: function (res) {
+                //如果上传失败
+                if (res.code == 0) {
+                    layer.closeAll('loading');
+                    cover = res.data;
+                    $('#fengmian').html('<img src="__STATIC__'+res.data+'" width="80" height="80">');
+                } else {
+                    return layer.msg(res.msg);
+                }
+            }
+            , error: function () {
+                return layer.msg('上传错误');
             }
         });
-        return false;
-    });
-
+    })
 </script>

@@ -1,0 +1,63 @@
+<div class="layui-card-body" id="alert_form" style="height: 380px">
+    <form class="layui-form" action="" lay-filter="alert">
+        <div class="layui-form-item">
+            <label class="layui-form-label">会员名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="member_name" value="{$data.member_name|default=''}" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">联系电话</label>
+            <div class="layui-input-block">
+                <input type="text" name="phone" value="{$data.phone|default=''}" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">邮箱</label>
+            <div class="layui-input-block">
+                <input type="text" name="email" value="{$data.email|default=''}" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">联系地址</label>
+            <div class="layui-input-block">
+                <input type="text" name="address" value="{$data.address|default=''}" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="save">保存</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+        //监听提交
+        form.on('submit(save)', function (obj) {
+            var post = obj.field;
+            $.ajax({
+                type: 'POST',
+                url: '{:url("admin/Member/save")}',
+                dataType: 'json',
+                data: {
+                    post: post,
+                    id: "{$data.id|default=''}"
+                },
+                success: function (data) {
+                    if (data.code == 0) {
+                        layer.msg(data.msg, {icon: 1, time: 2000}, function () {
+                            layer.closeAll();
+                            search(curr_page);
+                        })
+                    } else {
+                        layer.msg(data.msg, {icon: 2, time: 2000})
+                    }
+                },
+                error: function (jqXHR) {
+                    layer.alert('提交失败');
+                }
+            });
+            return false;
+        });
+</script>

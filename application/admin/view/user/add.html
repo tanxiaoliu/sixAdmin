@@ -1,0 +1,69 @@
+<div class="layui-card-body" id="alert_form" style="height: 380px">
+    <form class="layui-form" action="" lay-filter="alert">
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户昵称</label>
+            <div class="layui-input-block">
+                <input type="text" name="nickname" value="{$data.nickname|default=''}" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户名</label>
+            <div class="layui-input-block">
+                <input type="text" name="user_name" value="{$data.user_name|default=''}" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">联系电话</label>
+            <div class="layui-input-block">
+                <input type="tel" name="phone" value="{$data.phone|default=''}" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">邮箱</label>
+            <div class="layui-input-block">
+                <input type="email" name="email" value="{$data.email|default=''}" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">状态</label>
+            <div class="layui-input-block">
+                <input type="text" name="status" value="{$data.status|default=''}" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="save">保存</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+        //监听提交
+        form.on('submit(save)', function (obj) {
+            var post = obj.field;
+            $.ajax({
+                type: 'POST',
+                url: '{:url("admin/User/save")}',
+                dataType: 'json',
+                data: {
+                    post: post,
+                    id: "{$data.id|default=''}"
+                },
+                success: function (data) {
+                    if (data.code == 0) {
+                        layer.msg(data.msg, {icon: 1, time: 2000}, function () {
+                            layer.closeAll();
+                            search(curr_page);
+                        })
+                    } else {
+                        layer.msg(data.msg, {icon: 2, time: 2000})
+                    }
+                },
+                error: function (jqXHR) {
+                    layer.alert('提交失败');
+                }
+            });
+            return false;
+        });
+</script>

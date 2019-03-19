@@ -24,7 +24,7 @@
                         </div>
                         <div class="layui-col-xs5">
                             <div style="margin-left: 10px;">
-                                <img src="{:url('admin/login/captcha')}" alt="captcha" class="layadmin-user-login-codeimg" id="verify_img" onclick="refreshVerify()">
+                                <img src="{:url('admin/Login/captcha')}" alt="captcha" class="layadmin-user-login-codeimg" id="verify_img" onclick="refreshVerify()">
                             </div>
                         </div>
                     </div>
@@ -58,7 +58,7 @@
 
     //验证码刷新
     function refreshVerify() {
-        $('#verify_img').attr("src", "{:url('admin/login/captcha')}");
+        $('#verify_img').attr("src", "{:url('admin/Login/captcha')}");
     }
 
     //enter提交登录
@@ -89,7 +89,7 @@
         remember = remember === true ? 1 : 0;
         $.ajax({
             type:'POST',
-            url:'{:url("admin/login/index")}',
+            url:'{:url("admin/Login/index")}',
             dataType:'json',
             data:{
                 user_name: user_name,

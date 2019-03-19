@@ -13,33 +13,31 @@
 use think\Request;
 
 /**
- * ajax成功返回json数据
- * @param string $msg
- * @param string $url
+ * 用于后端列表json数据返回
+ * @param int $count
  * @param array $data
  * @return \think\response\Json
  */
-function ajax_success($msg = '操作成功', $url = '', $data = array())
+function ajax_list($count = 0, $data = array())
 {
     $tmp['code'] = 0;
-    $tmp['msg'] = $msg;
-    $tmp['url'] = $url;
+    $tmp['msg'] = 'success';
+    $tmp['count'] = $count;
     $tmp['data'] = $data;
     return json($tmp);
 }
 
 /**
- * ajax失败返回json数据
+ * 用于后端操作json数据返回
+ * @param int $code
  * @param string $msg
- * @param string $url
  * @param array $data
  * @return \think\response\Json
  */
-function ajax_error($msg = '操作失败', $url = '', $data = array())
+function ajax_return($code = 0, $msg = 'success',  $data = array())
 {
-    $tmp['code'] = 1;
+    $tmp['code'] = $code;
     $tmp['msg'] = $msg;
-    $tmp['url'] = $url;
     $tmp['data'] = $data;
     return json($tmp);
 }
