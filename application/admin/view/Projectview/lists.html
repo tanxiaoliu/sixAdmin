@@ -46,7 +46,7 @@
 
         table.render({
             elem: '#test'
-            ,url: '/admin/ProjectView/getList'
+            ,url: '/admin/Projectview/getList'
             ,page: true //开启分页
             ,cols: [[ //表头
                 {field: 'id', title: 'ID', width:60}
@@ -64,16 +64,16 @@
 
         //新增
         $("#table .add").click(function () {
-            edit("{:url('/admin/ProjectView/add')}", '新增项目页面');
+            edit("{:url('/admin/Projectview/add')}", '新增项目页面');
         });
 
         //监听行工具事件
         table.on('tool(test)', function(obj){
             var data = obj.data;
             if(obj.event === 'del'){
-                deleted("{:url('admin/ProjectView/delete')}", obj)
+                deleted("{:url('admin/Projectview/delete')}", obj)
             } else if(obj.event === 'edit'){
-                edit("{:url('/admin/ProjectView/add/id/"+ data.id +"')}", '编辑' + data.title);
+                edit("{:url('/admin/Projectview/add/id/"+ data.id +"')}", '编辑' + data.title);
             }
         });
     });

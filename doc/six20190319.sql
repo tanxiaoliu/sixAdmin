@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2019-03-19 11:13:09
+Date: 2019-03-19 11:28:48
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -62,7 +62,7 @@ CREATE TABLE `k_power` (
 INSERT INTO `k_power` VALUES ('1', '项目管理', '0', '', 'template-1', '0', '0', null, '100', null, '0');
 INSERT INTO `k_power` VALUES ('2', '系统管理', '0', '', 'set', '0', '0', null, '300', null, '0');
 INSERT INTO `k_power` VALUES ('3', '项目列表', '1', '/admin/project/lists', '', '0', '0', null, '100', null, '0');
-INSERT INTO `k_power` VALUES ('4', '项目页面列表', '1', '/admin/projectView/lists', '', '0', '0', null, '200', null, '0');
+INSERT INTO `k_power` VALUES ('4', '项目页面列表', '1', '/admin/projectview/lists', '', '0', '0', null, '200', null, '0');
 INSERT INTO `k_power` VALUES ('5', '用户管理', '2', '/admin/user/lists', '', '0', '0', null, '0', null, '0');
 INSERT INTO `k_power` VALUES ('7', '权限管理', '2', '/admin/power/lists', '', '0', '0', null, '0', null, '0');
 INSERT INTO `k_power` VALUES ('8', '角色管理', '2', '/admin/role/lists', '', '0', '0', null, '0', null, '0');

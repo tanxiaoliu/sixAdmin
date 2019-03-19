@@ -10,9 +10,10 @@ use traits\model\SoftDelete;
  * Date: 2019/3/14 0014
  * Time: 下午 10:52
  */
-class ProjectView extends Model
+class Projectview extends Model
 {
     use SoftDelete;
+    protected $table = 'k_project_view';
     protected $deleteTime = 'delete_time';
     protected $autoWriteTimestamp = true;
 

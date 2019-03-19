@@ -3,11 +3,11 @@ namespace app\admin\controller;
 
 /**
  * 项目页面管理
- * ProjectView: tanhuaxin
+ * Projectview: tanhuaxin
  * Date: 2019/3/13
  * Time: 下午10:54
  */
-class ProjectView extends Controller
+class Projectview extends Controller
 {
     /**
      * 项目页面列表
@@ -27,8 +27,8 @@ class ProjectView extends Controller
         $page = input('page', 0);
         $limit = input('limit', 20);
         $map = array();
-        $data = model('ProjectView')->getList($map, $page, $limit);
-        $count = model('ProjectView')->countList($map);
+        $data = model('Projectview')->getList($map, $page, $limit);
+        $count = model('Projectview')->countList($map);
         return ajax_list( $count,  $data);
     }
 
@@ -45,7 +45,7 @@ class ProjectView extends Controller
         $data = array();
         if ($id) {
             $id = input('id');
-            $data = model('ProjectView')->find($id);
+            $data = model('Projectview')->find($id);
         }
         $this->assign('data', $data);
         return view();
@@ -63,7 +63,7 @@ class ProjectView extends Controller
         if($id) {
             $map['id'] = $id;
         }
-        $result = model('ProjectView')->save($post, $map);
+        $result = model('Projectview')->save($post, $map);
         if ($result) {
             return ajax_return(0, '保存成功', 'lists');
         } else {
@@ -78,7 +78,7 @@ class ProjectView extends Controller
     function delete()
     {
         $id = input('id' );
-        $result = model('ProjectView')->deleteById($id);
+        $result = model('Projectview')->deleteById($id);
         if($result) {
             return ajax_return(0, '删除成功');
         } else {
