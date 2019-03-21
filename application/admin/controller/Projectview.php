@@ -1,6 +1,8 @@
 <?php
 namespace app\admin\controller;
 
+use think\Validate;
+
 /**
  * 项目页面管理
  * Projectview: tanhuaxin
@@ -26,7 +28,11 @@ class Projectview extends Controller
     {
         $page = input('page', 0);
         $limit = input('limit', 20);
+        $keyword = input('keyword');
         $map = array();
+        if($keyword){
+            $map['a.title'] = array('like', '%'.$keyword.'%');
+        }
         $data = model('Projectview')->getList($map, $page, $limit);
         $count = model('Projectview')->countList($map);
         return ajax_list( $count,  $data);
@@ -47,6 +53,8 @@ class Projectview extends Controller
             $id = input('id');
             $data = model('Projectview')->find($id);
         }
+        $memberList = model('Member')->getMemberList();
+        $this->assign('memberList', $memberList);
         $this->assign('data', $data);
         return view();
     }
@@ -57,7 +65,15 @@ class Projectview extends Controller
      */
     function save()
     {
+        $rule = [
+            ['title','require|max:25','标题名称不能为空|标题名称最多不能超过25个字符'],
+            ['project_ids','require','项目不能为空']
+        ];
+        $validate = new Validate($rule);
         $post = $this->postData('post');
+        if(!$validate->check($post)){
+            return ajax_return(1, $validate->getError());
+        }
         $id = input('id');
         $map = array();
         if($id) {

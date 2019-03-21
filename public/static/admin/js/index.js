@@ -24,7 +24,7 @@ function deleted(url, obj) {
             },
             success: function (data) {
                 if(data.code == 0){
-                    layer.msg(data.msg,{icon:1,time:2000}, function(){
+                    layer.msg(data.msg,{icon:6,time:2000}, function(){
                         layer.closeAll();
                         // if(url_data == 1){
                         //     $(".search").click();
@@ -33,7 +33,7 @@ function deleted(url, obj) {
                         // }
                     })
                 } else{
-                    layer.msg(data.msg,{icon:2,time:2000})
+                    layer.msg(data.msg,{icon:5,time:2000})
                 }
             }
         });

@@ -1,6 +1,8 @@
 <?php
 namespace app\admin\controller;
 
+use think\Validate;
+
 /**
  * 权限管理
  * User: tanhuaxin
@@ -57,7 +59,15 @@ class Power extends Controller
      */
     function save()
     {
+        $rule = [
+            ['power_name','require','权限名称不能为空'],
+            ['uri','require','uri名称不能为空'],
+        ];
+        $validate = new Validate($rule);
         $post = $this->postData('post');
+        if(!$validate->check($post)){
+            return ajax_return(1, $validate->getError());
+        }
         $id = input('id');
         $map = array();
         if($id) {

@@ -1,9 +1,4 @@
 {include file="admin@public/header" /}
-<style type="text/css">
-    .layui-table-cell{
-        height: auto;
-    }
-</style>
 <body>
 <div class="layui-fluid">
     <div class="layui-row">
@@ -14,6 +9,14 @@
                     <div class="layui-btn-group">
                         <button class="layui-btn layui-btn-primary layui-btn-sm add">新增</button>
                     </div>
+                </div>
+                <!-- 筛选区 -->
+                <div class="search-content">
+                    会员名
+                    <div class="layui-inline">
+                        <input class="layui-input" name="keyword" id="keyword" autocomplete="off">
+                    </div>
+                    <button class="layui-btn layui-btn-sm search" onclick="search(1)">确定</button>
                 </div>
             </div>
             <div class="layui-card-body">
@@ -30,15 +33,9 @@
     var curr_page;
     //搜索
     function search(curr) {
-        var create_time = $('#create_time').val();
-        var project_type = $('#project_type').val();
-        var model_state = $('#model_state').val();
-        var review_state = $('#review_state').val();
-        var tags = $('#tags').val();
-        var search_type = $('#search_type').val();
         var keyword = $('#keyword').val();
         //执行重载
-        table.reload('test', {page: {curr: curr}, where: {create_time:create_time, project_type: project_type, model_state:model_state, review_state:review_state, tags:tags, keyword:keyword, search_type:search_type}});
+        table.reload('test', {page: {curr: curr}, where: {keyword:keyword}});
     }
 
     layui.use(['laydate', 'table'], function() {

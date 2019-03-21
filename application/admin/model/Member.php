@@ -53,4 +53,18 @@ class Member extends Model
         return self::destroy($id);
     }
 
+    /**
+     * 获取会员列表
+     * @param array $map
+     * @param string $order
+     * @return false|\PDOStatement|string|\think\Collection
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
+    function getMemberList($map = array(), $order = 'id desc')
+    {
+        return $this->where($map)->order($order)->field('id, member_name')->select();
+    }
+
 }

@@ -3,25 +3,24 @@
         <div class="layui-form-item">
             <label class="layui-form-label">标题名称</label>
             <div class="layui-input-block">
-                <input type="text" name="title" value="{$data.title|default=''}" autocomplete="off" class="layui-input">
+                <input type="text" name="title" value="{$data.title|default=''}" autocomplete="off" lay-verify="required" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">会员</label>
-            <div class="layui-input-block">
-                <input type="text" name="member_id" value="{$data.member_id|default=''}" autocomplete="off" class="layui-input">
+            <label class="layui-form-label">所属会员</label>
+            <div class="layui-input-inline">
+                <select name="member_id" lay-verify="required" lay-search="">
+                    <option value="">直接选择或搜索选择</option>
+                    {volist name="memberList" id="vo"}
+                    <option value="{$vo.id}" {if condition="$data and ($data.member_id eq $vo.id)"} selected{/if} >{$vo.member_name}</option>
+                    {/volist}
+                </select>
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">项目</label>
             <div class="layui-input-block">
-                <input type="text" name="project_ids" value="{$data.project_ids|default=''}" autocomplete="off" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">页面地址</label>
-            <div class="layui-input-block">
-                <input type="text" name="url" value="{$data.url|default=''}" autocomplete="off" class="layui-input">
+                <input type="text" name="project_ids" value="{$data.project_ids|default=''}" autocomplete="off" lay-verify="required" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
@@ -46,12 +45,12 @@
                 },
                 success: function (data) {
                     if (data.code == 0) {
-                        layer.msg(data.msg, {icon: 1, time: 2000}, function () {
+                        layer.msg(data.msg, {icon: 6, time: 2000}, function () {
                             layer.closeAll();
                             search(curr_page);
                         })
                     } else {
-                        layer.msg(data.msg, {icon: 2, time: 2000})
+                        layer.msg(data.msg, {icon: 5, time: 2000})
                     }
                 },
                 error: function (jqXHR) {

@@ -1,6 +1,8 @@
 <?php
 namespace app\admin\controller;
 
+use think\Validate;
+
 /**
  * 项目管理
  * User: tanhuaxin
@@ -26,7 +28,16 @@ class Project extends Controller
     {
         $page = input('page', 0);
         $limit = input('limit', 20);
+        $searchType = input('search_type', 0);
+        $keyword= input('keyword');
         $map = array();
+        if($keyword){
+            if($searchType == 0) {
+                $map['a.project_name'] = array('like', '%' . $keyword . '%');
+            } else {
+                $map['b.member_name'] = array('like', '%' . $keyword . '%');
+            }
+        }
         $data = model('Project')->getList($map, $page, $limit);
         $count = model('Project')->countList($map);
         return ajax_list( $count,  $data);
@@ -47,6 +58,8 @@ class Project extends Controller
             $id = input('id');
             $data = model('Project')->find($id);
         }
+        $memberList = model('Member')->getMemberList();
+        $this->assign('memberList', $memberList);
         $this->assign('data', $data);
         return view();
     }
@@ -57,7 +70,17 @@ class Project extends Controller
      */
     function save()
     {
+        $rule = [
+            ['project_name','require|max:25','项目名称不能为空|项目名称最多不能超过25个字符'],
+            ['member_id','require','会员不能为空'],
+            ['cover','require','项目封面不能为空'],
+            ['path','require','项目路径不能为空']
+        ];
+        $validate = new Validate($rule);
         $post = $this->postData('post');
+        if(!$validate->check($post)){
+            return ajax_return(1, $validate->getError());
+        }
         $id = input('id');
         $map = array();
         if($id) {

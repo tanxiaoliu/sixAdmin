@@ -1,6 +1,8 @@
 <?php
 namespace app\admin\controller;
 
+use think\Validate;
+
 /**
  * 用户管理
  * User: tanhuaxin
@@ -57,7 +59,16 @@ class User extends Controller
      */
     function save()
     {
+        $rule = [
+            ['user_name','require|max:25','用户名不能为空|用户名最多不能超过25个字符'],
+            ['phone','regex:/^1[34578]{1}[0-9]{9}$/','手机格式错误'],
+            ['email','email','邮箱格式错误']
+        ];
+        $validate = new Validate($rule);
         $post = $this->postData('post');
+        if(!$validate->check($post)){
+            return ajax_return(1, $validate->getError());
+        }
         $id = input('id');
         $map = array();
         if($id) {

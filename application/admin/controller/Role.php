@@ -1,6 +1,8 @@
 <?php
 namespace app\admin\controller;
 
+use think\Validate;
+
 /**
  * 角色管理
  * Role: tanhuaxin
@@ -57,7 +59,14 @@ class Role extends Controller
      */
     function save()
     {
+        $rule = [
+            ['role_name','require','角色名不能为空']
+        ];
+        $validate = new Validate($rule);
         $post = $this->postData('post');
+        if(!$validate->check($post)){
+            return ajax_return(1, $validate->getError());
+        }
         $id = input('id');
         $map = array();
         if($id) {

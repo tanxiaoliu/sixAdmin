@@ -3,19 +3,19 @@
         <div class="layui-form-item">
             <label class="layui-form-label">权限名称</label>
             <div class="layui-input-block">
-                <input type="text" name="power_name" value="{$data.power_name|default=''}" autocomplete="off" class="layui-input">
+                <input type="text" name="power_name" value="{$data.power_name|default=''}" autocomplete="off" lay-verify="required" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">父级菜单id</label>
             <div class="layui-input-block">
-                <input type="text" name="parent_id" value="{$data.parent_id|default=''}" autocomplete="off" class="layui-input">
+                <input type="text" name="parent_id" value="{$data.parent_id|default=''}" autocomplete="off" lay-verify="required" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">uri地址</label>
             <div class="layui-input-block">
-                <input type="text" name="uri" value="{$data.uri|default=''}" autocomplete="off" class="layui-input">
+                <input type="text" name="uri" value="{$data.uri|default=''}" autocomplete="off" lay-verify="required" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
@@ -46,12 +46,12 @@
                 },
                 success: function (data) {
                     if (data.code == 0) {
-                        layer.msg(data.msg, {icon: 1, time: 2000}, function () {
+                        layer.msg(data.msg, {icon: 6, time: 2000}, function () {
                             layer.closeAll();
                             search(curr_page);
                         })
                     } else {
-                        layer.msg(data.msg, {icon: 2, time: 2000})
+                        layer.msg(data.msg, {icon: 5, time: 2000})
                     }
                 },
                 error: function (jqXHR) {

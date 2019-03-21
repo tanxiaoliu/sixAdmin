@@ -1,9 +1,4 @@
 {include file="admin@public/header" /}
-<style type="text/css">
-    .layui-table-cell{
-        height: auto;
-    }
-</style>
 <body>
 <div class="layui-fluid">
     <div class="layui-row">
@@ -14,6 +9,15 @@
                     <div class="layui-btn-group">
                         <button class="layui-btn layui-btn-primary layui-btn-sm add">新增</button>
                     </div>
+                </div>
+
+                <!-- 筛选区 -->
+                <div class="search-content">
+                    标题名称
+                        <div class="layui-inline">
+                            <input class="layui-input" name="keyword" id="keyword" autocomplete="off">
+                        </div>
+                    <button class="layui-btn layui-btn-sm search" onclick="search(1)">确定</button>
                 </div>
             </div>
             <div class="layui-card-body">
@@ -26,19 +30,16 @@
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
+<script type="text/html" id="urlTpl">
+    xxx/id/{{d.id}}
+</script>
 <script type="text/javascript">
     var curr_page;
     //搜索
     function search(curr) {
-        var create_time = $('#create_time').val();
-        var project_type = $('#project_type').val();
-        var model_state = $('#model_state').val();
-        var review_state = $('#review_state').val();
-        var tags = $('#tags').val();
-        var search_type = $('#search_type').val();
         var keyword = $('#keyword').val();
         //执行重载
-        table.reload('test', {page: {curr: curr}, where: {create_time:create_time, project_type: project_type, model_state:model_state, review_state:review_state, tags:tags, keyword:keyword, search_type:search_type}});
+        table.reload('test', {page: {curr: curr}, where: { keyword:keyword}});
     }
 
     layui.use(['laydate', 'table'], function() {
@@ -50,10 +51,10 @@
             ,page: true //开启分页
             ,cols: [[ //表头
                 {field: 'id', title: 'ID', width:60}
-                ,{field: 'title', title: '标题名称', width:200}
-                ,{field: 'member_id', title: '会员', width:250}
+                ,{field: 'title', title: '标题名称', width:250}
+                ,{field: 'member_id', title: '会员', width:150}
                 ,{field: 'project_ids', title: '项目'}
-                ,{field: 'url', title: '页面地址'}
+                ,{field: 'url', title: '页面地址', toolbar: '#urlTpl'}
                 ,{field: 'create_time', title: '创建时间', width:155}
                 ,{fixed: 'right', title:'操作', toolbar: '#optTpl', width:150}
             ]],

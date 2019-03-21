@@ -28,9 +28,12 @@ class Projectview extends Model
      * @throws \think\db\exception\ModelNotFoundException
      * @throws \think\exception\DbException
      */
-    function getList($map = array(), $page = 1, $limit = 20, $order = 'id desc')
+    function getList($map = array(), $page = 1, $limit = 20, $order = 'a.id desc')
     {
-        return $this->where($map)->page($page, $limit)->order($order)->select();
+        return $this->alias('a')
+            ->field('a.*, b.member_name')
+            ->join('member b', 'a.member_id = b.id', 'left')
+            ->where($map)->page($page, $limit)->order($order)->select();
     }
 
     /**
@@ -41,7 +44,7 @@ class Projectview extends Model
      */
     public function countList($map = array())
     {
-        return $this->where($map)->count();
+        return $this->alias('a')->where($map)->count();
     }
 
     /**

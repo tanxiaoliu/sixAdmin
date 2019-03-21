@@ -3,15 +3,17 @@
         <div class="layui-form-item">
             <label class="layui-form-label">项目名称</label>
             <div class="layui-input-block">
-                <input type="text" name="project_name" value="{$data.project_name|default=''}" autocomplete="off" class="layui-input">
+                <input type="text" name="project_name" value="{$data.project_name|default=''}" autocomplete="off" lay-verify="required" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">所属用户</label>
+            <label class="layui-form-label">所属会员</label>
             <div class="layui-input-inline">
-                <select name="member_id" lay-verify="required">
-                    <option value="0">张三</option>
-                    <option value="1">李四</option>
+                <select name="member_id" lay-verify="required" lay-search="">
+                    <option value="">直接选择或搜索选择</option>
+                    {volist name="memberList" id="vo"}
+                    <option value="{$vo.id}" {if condition="$data and ($data.member_id eq $vo.id)"} selected{/if} >{$vo.member_name}</option>
+                    {/volist}
                 </select>
             </div>
         </div>
@@ -24,14 +26,14 @@
         <div class="layui-form-item">
             <label class="layui-form-label">项目封面图</label>
             <div class="layui-input-block">
-                <span id="fengmian"><img src="__STATIC__{$data.cover|default=''}" width="80" height="80"></span>
+                <span id="fengmian"><img src="__STATIC__{$data.cover|default='/admin/images/default.jpg'}" width="80" height="80"></span>
                 <a class="layui-btn" id="sc">上传封面</a>
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">项目路径</label>
             <div class="layui-input-block">
-                <input type="text" name="path" value="{$data.path|default=''}" autocomplete="off" class="layui-input">
+                <input type="text" name="path" value="{$data.path|default=''}" autocomplete="off" lay-verify="required" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
@@ -50,27 +52,28 @@
         //监听提交
         form.on('submit(save)', function (obj) {
             if(cover == ''){
-                layer.msg('请上传项目封面', {icon: 2, time: 2000});
+                layer.msg('请上传项目封面', {icon: 5, time: 2000});
                 return false;
             }
             var post = obj.field;
+            post.cover = cover;
+            delete post.file;
             $.ajax({
                 type: 'POST',
                 url: '{:url("admin/Project/save")}',
                 dataType: 'json',
                 data: {
                     post:post,
-                    cover: cover,
                     id: "{$data.id|default=''}"
                 },
                 success: function (data) {
                     if (data.code == 0) {
-                        layer.msg(data.msg, {icon: 1, time: 2000}, function () {
+                        layer.msg(data.msg, {icon: 6, time: 2000}, function () {
                             layer.closeAll();
                             search(curr_page);
                         })
                     } else {
-                        layer.msg(data.msg, {icon: 2, time: 2000})
+                        layer.msg(data.msg, {icon: 5, time: 2000})
                     }
                 },
                 error: function (jqXHR) {
