@@ -22,39 +22,45 @@
         </div>
     </div>
 </div>
+<script type="text/html" id="powerTpl">
+    {{#  if(d.level == 2){ }}
+    &nbsp;&nbsp;丨---
+    {{#  } else if(d.level == 3) { }}
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;丨---
+    {{#  } }}
+    {{d.power_name}}
+</script>
+<script type="text/html" id="typeTpl">
+    {{#  if(d.type == 0){ }}
+    菜单
+    {{#  } else { }}
+    按钮
+    {{#  } }}
+</script>
+<script type="text/html" id="iconTpl">
+    {{#  if(d.icon){ }}
+    <i class="layui-icon layui-icon-{{d.icon}}"></i>
+    {{#  } }}
+</script>
 <script type="text/html" id="optTpl">
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 <script type="text/javascript">
-    var curr_page;
-    //搜索
-    function search(curr) {
-        var create_time = $('#create_time').val();
-        var project_type = $('#project_type').val();
-        var model_state = $('#model_state').val();
-        var review_state = $('#review_state').val();
-        var tags = $('#tags').val();
-        var search_type = $('#search_type').val();
-        var keyword = $('#keyword').val();
-        //执行重载
-        table.reload('test', {page: {curr: curr}, where: {create_time:create_time, project_type: project_type, model_state:model_state, review_state:review_state, tags:tags, keyword:keyword, search_type:search_type}});
-    }
-
     layui.use(['laydate', 'table'], function() {
         var table = layui.table;
 
         table.render({
             elem: '#test'
-            ,url: '/admin/Power/getList'
+            ,url: '/admin/power/lists'
             ,page: true //开启分页
             ,cols: [[ //表头
                 {field: 'id', title: 'ID', width:60}
-                ,{field: 'power_name', title: '权限名称', width:200}
-                ,{field: 'parent_id', title: '父级菜单id', width:250}
+                ,{field: 'power_name', title: '权限名称', toolbar: '#powerTpl'}
                 ,{field: 'uri', title: 'uri地址'}
-                ,{field: 'icon', title: '图标'}
-                ,{field: 'sort', title: '排序'}
+                ,{field: 'icon', title: '图标', toolbar: '#iconTpl', width:100, align: 'center'}
+                ,{field: 'type', title: '类型', toolbar: '#typeTpl', width:100}
+                ,{field: 'sort', title: '排序', width:100}
                 ,{field: 'create_time', title: '创建时间', width:155}
                 ,{fixed: 'right', title:'操作', toolbar: '#optTpl', width:150}
             ]],
@@ -65,16 +71,16 @@
 
         //新增
         $("#table .add").click(function () {
-            edit("{:url('/admin/Power/add')}", '新增权限');
+            edit("{:url('/admin/power/add')}", '新增权限');
         });
 
         //监听行工具事件
         table.on('tool(test)', function(obj){
             var data = obj.data;
             if(obj.event === 'del'){
-                deleted("{:url('admin/Power/delete')}", obj)
+                deleted("{:url('admin/power/delete')}", obj)
             } else if(obj.event === 'edit'){
-                edit("{:url('/admin/Power/add/id/"+ data.id +"')}", '编辑' + data.power_name);
+                edit("{:url('/admin/power/edit/id/"+ data.id +"')}", '编辑' + data.power_name);
             }
         });
     });

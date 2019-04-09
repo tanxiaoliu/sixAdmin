@@ -2,6 +2,7 @@
 namespace app\admin\controller;
 
 use think\Session;
+use think\Validate;
 
 /**
  * 后台控制器基类
@@ -32,10 +33,10 @@ class Controller extends \think\Controller
     /* @var array $allowAllAction 登录验证白名单 */
     protected $allowAllAction = [
         // 登录页面
-        'admin/Login/index',
-        'admin/Login/logout',
-        'admin/Login/captcha',
-        'admin/Login/test',
+        'admin/login/index',
+        'admin/login/logout',
+        'admin/login/captcha',
+        'admin/login/test',
     ];
 
     /**
@@ -159,5 +160,19 @@ class Controller extends \think\Controller
     protected function postData($key)
     {
         return $this->request->post($key . '/a');
+    }
+
+    /**
+     * 验证提交
+     * @param $rule
+     * @param $post
+     * @return array
+     */
+    protected function checkValidate($rule, $post)
+    {
+        $validate = new Validate($rule);
+        if(!$validate->check($post)){
+            return $this->renderError($validate->getError());
+        }
     }
 }

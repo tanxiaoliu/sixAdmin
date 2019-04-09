@@ -30,20 +30,19 @@
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 <script type="text/javascript">
-    var curr_page;
+    var curr_page = 1;
     //搜索
-    function search(curr) {
+    function search() {
         var keyword = $('#keyword').val();
         //执行重载
-        table.reload('test', {page: {curr: curr}, where: {keyword:keyword}});
+        table.reload('test', {page: {curr: curr_page}, where: {keyword:keyword}});
     }
 
     layui.use(['laydate', 'table'], function() {
         var table = layui.table;
-
         table.render({
             elem: '#test'
-            ,url: '/admin/Member/getList'
+            ,url: '/admin/member/lists'
             ,page: true //开启分页
             ,cols: [[ //表头
                 {field: 'id', title: 'ID', width:60}
@@ -61,16 +60,16 @@
 
         //新增
         $("#table .add").click(function () {
-            edit("{:url('/admin/Member/add')}", '新增会员');
+            edit("{:url('/admin/member/add')}", '新增会员');
         });
 
         //监听行工具事件
         table.on('tool(test)', function(obj){
             var data = obj.data;
             if(obj.event === 'del'){
-                deleted("{:url('admin/Member/delete')}", obj)
+                deleted("{:url('admin/member/delete')}", obj)
             } else if(obj.event === 'edit'){
-                edit("{:url('/admin/Member/add/id/"+ data.id +"')}", '编辑' + data.member_name);
+                edit("{:url('/admin/member/edit/id/"+ data.id +"')}", '编辑' + data.member_name);
             }
         });
     });

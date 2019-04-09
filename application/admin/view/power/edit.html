@@ -1,0 +1,43 @@
+<div class="layui-card-body" id="alert_form" style="height: 380px">
+    <form class="layui-form" action="" lay-filter="alert">
+        <div class="layui-form-item">
+            <label class="layui-form-label">权限名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="power_name" value="{$data.power_name|default=''}" autocomplete="off" lay-verify="required" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">父级菜单id</label>
+            <div class="layui-input-block">
+                <input type="text" name="parent_id" value="{$data.parent_id|default=''}" autocomplete="off" lay-verify="required" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">uri地址</label>
+            <div class="layui-input-block">
+                <input type="text" name="uri" value="{$data.uri|default=''}" autocomplete="off" lay-verify="required" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><a href="https://www.layui.com/doc/element/icon.html" style="color: #1E9FFF;">图标</a></label>
+            <div class="layui-input-block">
+                <input type="text" name="icon" value="{$data.icon|default=''}" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="save">保存</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    //监听提交
+    form.on('submit(save)', function (obj) {
+        var post = obj.field;
+        post.id = "{$data.id|default=''}";
+        submitPost('{:url("admin/power/edit")}', post);
+        return false;
+    });
+</script>

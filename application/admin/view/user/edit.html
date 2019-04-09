@@ -1,0 +1,65 @@
+<div class="layui-card-body" id="alert_form" style="height: 380px">
+    <form class="layui-form" action="" lay-filter="alert">
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户角色</label>
+            <div class="layui-input-inline">
+                <select name="role_id" lay-verify="required">
+                    {volist name="roleList" id="vo"}
+                    <option value="{$vo.id}" {if condition="$data and ($data.role_id eq $vo.id)"} selected{/if} >{$vo.role_name}</option>
+                    {/volist}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">账号</label>
+            <div class="layui-input-block">
+                <input type="text" name="user_name" value="{$data.user_name|default=''}" autocomplete="off" lay-verify="required" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">密码</label>
+            <div class="layui-input-block">
+                <input type="text" name="password" value="" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户昵称</label>
+            <div class="layui-input-block">
+                <input type="text" name="nickname" value="{$data.nickname|default=''}" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">联系电话</label>
+            <div class="layui-input-block">
+                <input type="text" name="phone" value="{$data.phone|default=''}" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">邮箱</label>
+            <div class="layui-input-block">
+                <input type="text" name="email" value="{$data.email|default=''}" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">状态</label>
+            <div class="layui-input-block">
+                <input type="checkbox" {if condition="$data.status eq 0"}checked{/if} name="status" lay-skin="switch" lay-text="正常|禁用">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="save">保存</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    //监听提交
+    form.on('submit(save)', function (obj) {
+        var post = obj.field;
+        post.id = "{$data.id|default=''}";
+        submitPost('{:url("admin/user/edit")}', post);
+        return false;
+    });
+</script>

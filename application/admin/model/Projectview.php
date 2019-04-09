@@ -23,38 +23,50 @@ class Projectview extends Model
      * @param int $page
      * @param int $limit
      * @param string $order
-     * @return false|\PDOStatement|string|\think\Collection
+     * @return mixed
+     * @throws \think\Exception
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\ModelNotFoundException
      * @throws \think\exception\DbException
      */
-    function getList($map = array(), $page = 1, $limit = 20, $order = 'a.id desc')
+    function getList($map = array(), $page = 1, $limit = 20, $order = 'id desc')
     {
-        return $this->alias('a')
-            ->field('a.*, b.member_name')
-            ->join('member b', 'a.member_id = b.id', 'left')
-            ->where($map)->page($page, $limit)->order($order)->select();
+        $list['count'] = $this->where($map)->count();
+        $list['data'] = $this->where($map)->page($page, $limit)->order($order)->select();
+        return $list;
     }
 
     /**
-     * 获取数量
-     * @param array $map
-     * @return int|string
-     * @throws \think\Exception
-     */
-    public function countList($map = array())
-    {
-        return $this->alias('a')->where($map)->count();
-    }
-
-    /**
-     * 根据ID删除
+     * 获取详情
      * @param $id
+     * @return Member|null
+     * @throws \think\exception\DbException
+     */
+    public static function detail($id)
+    {
+        return self::get($id);
+    }
+
+    /**
+     * 新增、编辑
+     * @param $id
+     * @param $values
+     * @return bool
+     * @throws \think\exception\DbException
+     */
+    public function edit($id, $values)
+    {
+        $model = self::detail($id) ?: $this;
+        return $model->save($values) !== false;
+    }
+
+    /**
+     * 删除
      * @return int
      */
-    function deleteById($id)
+    public function remove()
     {
-        return self::destroy($id);
+        return $this->delete();
     }
 
 }

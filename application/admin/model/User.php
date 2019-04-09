@@ -22,31 +22,65 @@ class User extends Model
      * @param int $page
      * @param int $limit
      * @param string $order
-     * @return false|\PDOStatement|string|\think\Collection
+     * @return mixed
+     * @throws \think\Exception
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\ModelNotFoundException
      * @throws \think\exception\DbException
      */
-    function getList($map = array(), $page = 1, $limit = 20, $order = 'id desc')
+    function getList($map = array(), $page = 1, $limit = 20, $order = 'a.id desc')
     {
-        return $this->where($map)->page($page, $limit)->order($order)->select();
+        $list['count'] = $this->alias('a')
+            ->field('a.*, b.role_name')
+            ->join('role b', 'a.role_id = b.id', 'left')
+            ->where($map)->count();
+        $list['data'] = $this->alias('a')
+            ->field('a.*, b.role_name')
+            ->join('role b', 'a.role_id = b.id', 'left')
+            ->where($map)->page($page, $limit)->order($order)->select();
+        return $list;
     }
 
     /**
-     * 获取数量
-     * @param array $map
-     * @return int|string
-     * @throws \think\Exception
+     * 获取详情
+     * @param $id
+     * @return User|null
+     * @throws \think\exception\DbException
      */
-    public function countList($map = array())
+    public static function detail($id)
     {
-        return $this->where($map)->count();
+        return self::get($id);
+    }
+
+    /**
+     * 新增、编辑
+     * @param $id
+     * @param $values
+     * @return bool
+     * @throws \think\exception\DbException
+     */
+    public function edit($id, $values)
+    {
+        $model = self::detail($id) ?: $this;
+        return $model->save($values) !== false;
+    }
+
+    /**
+     * 删除
+     * @return int
+     */
+    public function remove()
+    {
+        return $this->delete();
     }
 
     /**
      * 根据用户ID获取用户
      * @param $userId
      * @return array|false|\PDOStatement|string|Model
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
      */
     function getUserByUserId($userId)
     {
@@ -54,22 +88,29 @@ class User extends Model
     }
 
     /**
-     * 根据用户名获取用户信息
+     * 根据账号获取用户信息
      * @param $userName
      * @return array|false|\PDOStatement|string|Model
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
      */
     function getUserByUserName($userName){
         return $this->where('user_name', $userName)->field('id, nickname, password, status')->find();
     }
 
     /**
-     * 根据ID删除
+     * 检测账号是否重复
+     * @param $userName
      * @param $id
-     * @return int
+     * @return array
      */
-    function deleteById($id)
+    function  checkUserName($userName, $id)
     {
-        return self::destroy($id);
+        $map['user_name'] = $userName;
+        $map['status'] = 0;
+        $map['id'] = array('neq', $id);
+        return $this->where($map)->column('id');
     }
 
 }

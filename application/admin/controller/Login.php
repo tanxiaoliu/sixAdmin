@@ -1,7 +1,6 @@
 <?php
 namespace app\admin\controller;
 
-use app\admin\model\User;
 use think\captcha\Captcha;
 use think\Cookie;
 use think\Session;
@@ -14,35 +13,28 @@ use think\Session;
  */
 class Login extends Controller
 {
-    function test(){
-        $data['user_name'] = 'test';
-        $data['nickname'] = '超级管理员';
-        $data['password'] = password_hash('test', PASSWORD_DEFAULT);
-        model('User')->save($data);
-        echo '插入成功';
-    }
 
     /**
      * 登陆
-     * @return \think\response\View
+     * @return array|\think\response\View
      */
     function index()
     {
+//        echo password_hash('admin', PASSWORD_DEFAULT);
         if ($this->request->isPost()) {
             $post = $this->request->post();
             if (!captcha_check($post['captcha'])) {
                 return $this->renderError('验证码不正确');
             }
             if (empty($post['user_name']) || empty($post['password'])) {
-                return $this->renderError('用户名或密码不能为空');
+                return $this->renderError('账号或密码不能为空');
             }
             //查询用户
             $user = model('User')->getUserByUserName($post['user_name']);
             if (empty($user) || $user['status'] == 1) {
-                return $this->renderError('登录失败, 用户名或密码错误');
+                return $this->renderError('登录失败, 账号或密码错误');
             }
-//            if (password_verify($post['password'], $user['password'])) {
-            if (1) {
+            if (password_verify($post['password'], $user['password'])) {
                 // 保存登录状态
                 Session::set('admin_user', [
                     'user' => [
@@ -52,9 +44,9 @@ class Login extends Controller
                 ]);
                 //记住密码7天
                 $post['remember'] == 1 ? Cookie::set('user_name', $post['user_name'], 302400) : Cookie::clear('user_');
-                return $this->renderSuccess('登录成功', '/admin/Index/index');
+                return $this->renderSuccess('登录成功', '/admin/index/index');
             } else {
-                return $this->renderError('登录失败, 用户名或密码错误');
+                return $this->renderError('登录失败, 账号或密码错误');
             }
         } else {
             $userName = Cookie::get('user_name');
@@ -71,7 +63,7 @@ class Login extends Controller
     function logout()
     {
         Session::clear('admin_user');
-        $this->redirect('Login/index');
+        $this->redirect('login/index');
     }
 
     /**

@@ -1,0 +1,41 @@
+<div class="layui-card-body" id="alert_form" style="height: 380px">
+    <form class="layui-form" action="" lay-filter="alert">
+        <div class="layui-form-item">
+            <label class="layui-form-label">角色名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="role_name" value="{$data.role_name|default=''}" autocomplete="off" lay-verify="required" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block">
+                <input type="tel" name="remark" value="{$data.remark|default=''}" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">状态</label>
+            <div class="layui-input-block">
+                {if condition="$data"}
+                    <input type="checkbox" {if condition="$data.status eq 0"}checked{/if} name="status" lay-skin="switch" lay-text="正常|禁用">
+                {else /}
+                    <input type="checkbox" name="status" checked lay-skin="switch" lay-text="正常|禁用">
+                {/if}
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="save">保存</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    //监听提交
+    form.on('submit(save)', function (obj) {
+        var post = obj.field;
+        post.id = "{$data.id|default=''}";
+        submitPost('{:url("admin/role/edit")}', post);
+        return false;
+    });
+</script>

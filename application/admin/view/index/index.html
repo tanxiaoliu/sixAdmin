@@ -9,7 +9,7 @@
                 </a>
             </li> -->
             <li class="layui-nav-item layui-hide-xs" lay-unselect="">
-                <a href="{:url('web/index/index')}" target="_blank">
+                <a href="#" target="_blank">
                     <i class="layui-icon layui-icon-website"></i> 网站
                 </a>
             </li>
@@ -24,7 +24,7 @@
                 <a href="javascript:;"><i class="layui-icon layui-icon-username"></i> {$user.nickname}</a>
             </li>
             <li class="layui-nav-item" lay-unselect="">
-                <a href="javascript:logout();">退出</a>
+                <a href="{:url('admin/login/logout')}">退出</a>
             </li>
         </ul>
     </div>
@@ -47,7 +47,7 @@
         <!-- tabcontent内容 -->
         <div class="layui-body layui-tab-content" id="LAY_app_body">
             <div class="layui-tab-item layui-show">
-              <iframe src="/admin/Index/home"></iframe>
+              <iframe src="/admin/index/home"></iframe>
             </div>
         </div>
         <!-- tabcontent end -->
@@ -109,24 +109,6 @@
     });
 
     });
-
-    //退出
-    function logout(){
-        $.ajax({
-            type:'POST',
-            url:'{:url("admin/Login/logout")}',
-            dataType:'json',
-            data:{},
-            success:function(data){
-                if(data.code == 0){
-                    layer.msg(data.msg, {icon: 6,time:1000}, function(index){
-                        layer.close(index);
-                        window.location.href = data.url;
-                    });
-                }
-            }
-        });
-    }
 
     //刷新
     function refresh() {

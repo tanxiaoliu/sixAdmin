@@ -34,7 +34,7 @@
     xxx/id/{{d.id}}
 </script>
 <script type="text/javascript">
-    var curr_page;
+    var curr_page = 1;
     //搜索
     function search(curr) {
         var keyword = $('#keyword').val();
@@ -47,7 +47,7 @@
 
         table.render({
             elem: '#test'
-            ,url: '/admin/Projectview/getList'
+            ,url: '/admin/projectview/lists'
             ,page: true //开启分页
             ,cols: [[ //表头
                 {field: 'id', title: 'ID', width:60}
@@ -65,16 +65,16 @@
 
         //新增
         $("#table .add").click(function () {
-            edit("{:url('/admin/Projectview/add')}", '新增项目页面');
+            edit("{:url('/admin/projectview/add')}", '新增项目页面');
         });
 
         //监听行工具事件
         table.on('tool(test)', function(obj){
             var data = obj.data;
             if(obj.event === 'del'){
-                deleted("{:url('admin/Projectview/delete')}", obj)
+                deleted("{:url('admin/projectview/delete')}", obj)
             } else if(obj.event === 'edit'){
-                edit("{:url('/admin/Projectview/add/id/"+ data.id +"')}", '编辑' + data.title);
+                edit("{:url('/admin/projectview/edit/id/"+ data.id +"')}", '编辑' + data.title);
             }
         });
     });

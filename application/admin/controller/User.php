@@ -1,7 +1,8 @@
 <?php
 namespace app\admin\controller;
 
-use think\Validate;
+use app\admin\model\User as UserModel;
+use app\admin\model\Role as RoleModel;
 
 /**
  * 用户管理
@@ -12,89 +13,116 @@ use think\Validate;
 class User extends Controller
 {
     /**
-     * 用户列表
-     * @return \think\response\View
+     * 列表
+     * @return mixed|\think\response\Json
+     * @throws \think\Exception
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
      */
     function lists()
     {
-        return view();
+        if (request()->isAjax()) {
+            $page = input('page', 1);
+            $limit = input('limit', 20);
+            $model = new UserModel;
+            $list = $model->getList('', $page, $limit);
+            return ajax_list($list);
+        } else {
+            return $this->fetch();
+        }
     }
 
     /**
-     * 获取用户列表数据
-     * @return \think\response\Json
-     */
-    function getList()
-    {
-        $page = input('page', 0);
-        $limit = input('limit', 20);
-        $map = array();
-        $data = model('User')->getList($map, $page, $limit);
-        $count = model('User')->countList($map);
-        return ajax_list( $count,  $data);
-    }
-
-    /**
-     * 添加、编辑页面
-     * @return \think\response\View
+     * 添加
+     * @return array|mixed
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\ModelNotFoundException
      * @throws \think\exception\DbException
      */
     function add()
     {
-        $id = input('id');
-        $data = array();
-        if ($id) {
-            $id = input('id');
-            $data = model('User')->find($id);
+        if (request()->isPost()) {
+            return $this->save($this->postData('post'));
+        } else {
+            $roleModel = new RoleModel;
+            $roleList = $roleModel->getRoleByStatus();
+            return $this->fetch('add', compact('roleList'));
         }
-        $this->assign('data', $data);
-        return view();
     }
 
     /**
-     * 用户新增、编辑操作
-     * @return \think\response\View
+     * 编辑
+     * @return array|mixed
+     * @throws \think\exception\DbException
      */
-    function save()
+    function edit()
+    {
+        if (request()->isPost()) {
+            return $this->save($this->postData('post'));
+        } else {
+            $id = input('id');
+            $data = UserModel::detail($id);
+            $roleList = new RoleModel;
+            $roleList = $roleList->getRoleByStatus();
+            return $this->fetch('edit', compact('data', 'roleList'));
+        }
+    }
+
+    /**
+     * 新增、编辑操作
+     * @param $post
+     * @return array
+     * @throws \think\exception\DbException
+     */
+    function save($post)
     {
         $rule = [
-            ['user_name','require|max:25','用户名不能为空|用户名最多不能超过25个字符'],
-            ['phone','regex:/^1[34578]{1}[0-9]{9}$/','手机格式错误'],
-            ['email','email','邮箱格式错误']
+            ['project_name','require|max:25','项目名称不能为空|项目名称最多不能超过25个字符'],
+            ['member_id','require','会员不能为空'],
+            ['cover','require','项目封面不能为空'],
+            ['path','require','项目路径不能为空']
         ];
-        $validate = new Validate($rule);
-        $post = $this->postData('post');
-        if(!$validate->check($post)){
-            return ajax_return(1, $validate->getError());
+        $this->checkValidate($rule, $post);
+        $model = new UserModel;
+        $id = isset($post['id']) ? $post['id'] : '';
+        //判断超级管理员
+        if($id == 1){
+            return ajax_return(1, '没有权限操作');
         }
-        $id = input('id');
-        $map = array();
-        if($id) {
-            $map['id'] = $id;
+        //检验账号
+        if($model->checkUserName($post['user_name'], $id)){
+            return ajax_return(1, '保存失败,账号重复');
         }
-        $result = model('User')->save($post, $map);
-        if ($result) {
-            return ajax_return(0, '保存成功', 'lists');
+        //验证密码
+        if($post['password']){
+            $post['password'] = password_hash($post['password'], PASSWORD_DEFAULT);
         } else {
-            return ajax_return(1, '保存失败');
+            unset($post['password']);
         }
+        if (!$model->edit($id, $post)) {
+            return $this->renderError('操作失败');
+        }
+        return $this->renderSuccess('操作成功');
     }
 
     /**
-     * 删除用户
-     * @return \think\response\Json
+     * 删除操作
+     * @param $id
+     * @return array
+     * @throws \think\exception\DbException
      */
-    function delete()
+    function delete($id)
     {
-        $id = input('id' );
-        $result = model('User')->deleteById($id);
-        if($result) {
-            return ajax_return(0, '删除成功');
-        } else {
-            return ajax_return(1, '删除失败');
+        //判断超级管理员
+        if($id == 1){
+            return ajax_return(1, '没有权限操作');
         }
+        $model = UserModel::detail($id);
+        if(!$model->remove()) {
+            return $this->renderError('删除失败');
+        }
+        return $this->renderSuccess('删除成功');
     }
 
 }

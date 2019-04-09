@@ -22,7 +22,7 @@
                     <div class="search-input-group">
                         <select name="search_type" id="search_type">
                             <option value="0">搜项目名</option>
-                            <option value="1">搜用户名</option>
+                            <option value="1">搜会员名</option>
                         </select><input type="text" class="layui-input-inline layui-input" id="keyword" name="keyword">
                     </div>
                     <button class="layui-btn layui-btn-sm search" onclick="search(1)">确定</button>
@@ -50,7 +50,7 @@
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 <script type="text/javascript">
-    var curr_page;
+    var curr_page = 1;
     //搜索
     function search(curr) {
         // var create_time = $('#create_time').val();
@@ -71,7 +71,7 @@
         table.render({
             elem: '#test'
             ,toolbar: '#toolbar'
-            ,url: '/admin/Project/getList'
+            ,url: '/admin/project/lists'
             ,page: true //开启分页
             ,cols: [[ //表头
                 // {type:'checkbox'}
@@ -79,7 +79,7 @@
                 ,{field: 'cover', title: '封面', width:80, templet: '#thumbTpl'}
                 ,{field: 'project_name', title: '项目名称', width:250}
                 ,{field: 'path', title: '项目路径'}
-                ,{field: 'member_name', title: '所属用户', templet: '#userTpl', width:120}
+                ,{field: 'member_name', title: '所属会员', templet: '#userTpl', width:120}
                 ,{field: 'tag', title: '标签', width:80}
                 ,{field: 'create_time', title: '创建时间', width:155}
                 ,{fixed: 'right', title:'操作', toolbar: '#optTpl', width:150}
@@ -91,17 +91,16 @@
 
         //新增
         $("#table .add").click(function () {
-            edit("{:url('/admin/Project/add')}", '新增项目');
+            edit("{:url('/admin/project/add')}", '新增项目');
         });
 
         //监听行工具事件
         table.on('tool(test)', function(obj){
             var data = obj.data;
-            console.log(obj);
             if(obj.event === 'del'){
-                deleted("{:url('admin/Project/delete')}", obj)
+                deleted("{:url('admin/project/delete')}", obj)
             } else if(obj.event === 'edit'){
-                edit("{:url('/admin/Project/add/id/"+ data.id +"')}", '编辑' + data.project_name);
+                edit("{:url('/admin/project/edit/id/"+ data.id +"')}", '编辑' + data.project_name);
             }
         });
     });

@@ -3,25 +3,25 @@
         <div class="layui-form-item">
             <label class="layui-form-label">会员名称</label>
             <div class="layui-input-block">
-                <input type="text" name="member_name" value="{$data.member_name|default=''}" autocomplete="off" lay-verify="required" class="layui-input">
+                <input type="text" name="member_name" value="" autocomplete="off" lay-verify="required" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">联系电话</label>
             <div class="layui-input-block">
-                <input type="text" name="phone" value="{$data.phone|default=''}" autocomplete="off" class="layui-input">
+                <input type="text" name="phone" value="" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">邮箱</label>
             <div class="layui-input-block">
-                <input type="text" name="email" value="{$data.email|default=''}" autocomplete="off" class="layui-input">
+                <input type="text" name="email" value="" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">联系地址</label>
             <div class="layui-input-block">
-                <input type="text" name="address" value="{$data.address|default=''}" autocomplete="off" class="layui-input">
+                <input type="text" name="address" value="" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
@@ -33,31 +33,10 @@
     </form>
 </div>
 <script>
-        //监听提交
-        form.on('submit(save)', function (obj) {
-            var post = obj.field;
-            $.ajax({
-                type: 'POST',
-                url: '{:url("admin/Member/save")}',
-                dataType: 'json',
-                data: {
-                    post: post,
-                    id: "{$data.id|default=''}"
-                },
-                success: function (data) {
-                    if (data.code == 0) {
-                        layer.msg(data.msg, {icon: 6, time: 2000}, function () {
-                            layer.closeAll();
-                            search(curr_page);
-                        })
-                    } else {
-                        layer.msg(data.msg, {icon: 5, time: 2000})
-                    }
-                },
-                error: function (jqXHR) {
-                    layer.alert('提交失败');
-                }
-            });
-            return false;
-        });
+    //监听提交
+    form.on('submit(save)', function (obj) {
+        var post = obj.field;
+        submitPost('{:url("admin/member/add")}', post);
+        return false;
+    });
 </script>

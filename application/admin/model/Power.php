@@ -13,7 +13,6 @@ use traits\model\SoftDelete;
 class Power extends Model
 {
     use SoftDelete;
-//    protected $deleteTime = 'delete_time';
     protected $autoWriteTimestamp = true;
 
     /**
@@ -22,25 +21,50 @@ class Power extends Model
      * @param int $page
      * @param int $limit
      * @param string $order
-     * @return false|\PDOStatement|string|\think\Collection
+     * @return mixed
+     * @throws \think\Exception
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\ModelNotFoundException
      * @throws \think\exception\DbException
      */
     function getList($map = array(), $page = 1, $limit = 20, $order = 'id desc')
     {
-        return $this->where($map)->page($page, $limit)->order($order)->select();
+        $list['count'] = $this->where($map)->count();
+        $list['data'] = $this->where($map)->page($page, $limit)->order($order)->select();
+        return $list;
     }
 
     /**
-     * 获取数量
-     * @param array $map
-     * @return int|string
-     * @throws \think\Exception
+     * 获取详情
+     * @param $id
+     * @return Member|null
+     * @throws \think\exception\DbException
      */
-    public function countList($map = array())
+    public static function detail($id)
     {
-        return $this->where($map)->count();
+        return self::get($id);
+    }
+
+    /**
+     * 新增、编辑
+     * @param $id
+     * @param $values
+     * @return bool
+     * @throws \think\exception\DbException
+     */
+    public function edit($id, $values)
+    {
+        $model = self::detail($id) ?: $this;
+        return $model->save($values) !== false;
+    }
+
+    /**
+     * 删除
+     * @return int
+     */
+    public function remove()
+    {
+        return $this->delete();
     }
 
     /**
@@ -70,7 +94,6 @@ class Power extends Model
                     }
                 }
                 $list[] = $one;
-
             }
         }
         return $list;
@@ -113,46 +136,36 @@ class Power extends Model
 
     /**
      * 根据角色获取权限菜单
-     * @param $userId
+     * @param $roleId
      * @param bool $status
      * @return array
      */
-    function getMenuByUserId($userId, $status = false)
+    function getMenuByUserId($roleId, $status = false)
     {
-        $roleIds = model('UserRole')->getRoleByUserId($userId);
         $authority = $this->getTreeList();
         //获取对应角色的id
-//        if ($status == false) {
-//            $result = db('role_power')->where('role_id', $roleId)->select();
-//            $oneIds = array();
-//            $ids = array();
-//            foreach ($result as $key => $value) {
-//                $oneIds[] = $this->where('id', $value['power_id'])->value('parent_id');
-//                $ids[] = $value['power_id'];
-//            }
-//            $oneIds = array_unique($oneIds);
-//
-//            foreach ($authority as $key => $value) {
-//                if (!in_array($value['id'], $oneIds)) {
-//                    unset($authority[$key]);
-//                }
-//                foreach ($value['navlist'] as $k => $v) {
-//                    if (!in_array($v['id'], $ids)) {
-//                        unset($authority[$key]['navlist'][$k]);
-//                    }
-//                }
-//            }
-//        }
+        if ($status == false) {
+            $result = db('role_power')->where('role_id', $roleId)->select();
+            $oneIds = array();
+            $ids = array();
+            foreach ($result as $key => $value) {
+                $oneIds[] = $this->where('id', $value['power_id'])->value('parent_id');
+                $ids[] = $value['power_id'];
+            }
+            $oneIds = array_unique($oneIds);
+
+            foreach ($authority as $key => $value) {
+                if (!in_array($value['id'], $oneIds)) {
+                    unset($authority[$key]);
+                }
+                foreach ($value['navlist'] as $k => $v) {
+                    if (!in_array($v['id'], $ids)) {
+                        unset($authority[$key]['navlist'][$k]);
+                    }
+                }
+            }
+        }
         return array_values($authority);
     }
 
-    /**
-     * 根据ID删除
-     * @param $id
-     * @return int
-     */
-    function deleteById($id)
-    {
-        return self::destroy($id);
-    }
 }

@@ -1,7 +1,8 @@
 <?php
 namespace app\admin\controller;
 
-use think\Validate;
+use app\admin\model\Projectview as ProjectviewModel;
+use app\admin\model\Member as MemberModel;
 
 /**
  * 项目页面管理
@@ -12,94 +13,102 @@ use think\Validate;
 class Projectview extends Controller
 {
     /**
-     * 项目页面列表
-     * @return \think\response\View
+     * 列表
+     * @return mixed|\think\response\Json
+     * @throws \think\Exception
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
      */
     function lists()
     {
-        return view();
-    }
-
-    /**
-     * 获取项目页面列表数据
-     * @return \think\response\Json
-     */
-    function getList()
-    {
-        $page = input('page', 0);
-        $limit = input('limit', 20);
-        $keyword = input('keyword');
-        $map = array();
-        if($keyword){
-            $map['a.title'] = array('like', '%'.$keyword.'%');
+        if (request()->isAjax()) {
+            $page = input('page', 1);
+            $limit = input('limit', 20);
+            $keyword= input('keyword');
+            $map = array();
+            if($keyword){
+                $map['title'] = array('like', '%' . $keyword . '%');
+            }
+            $model = new ProjectviewModel;
+            $list = $model->getList($map, $page, $limit);
+            return ajax_list($list);
+        } else {
+            return $this->fetch();
         }
-        $data = model('Projectview')->getList($map, $page, $limit);
-        $count = model('Projectview')->countList($map);
-        return ajax_list( $count,  $data);
     }
 
     /**
-     * 添加、编辑页面
-     * @return \think\response\View
+     * 添加
+     * @return array|mixed
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\ModelNotFoundException
      * @throws \think\exception\DbException
      */
     function add()
     {
-        $id = input('id');
-        $data = array();
-        if ($id) {
-            $id = input('id');
-            $data = model('Projectview')->find($id);
+        if (request()->isPost()) {
+            return $this->save($this->postData('post'));
+        } else {
+            $memberModel = new MemberModel;
+            $memberList = $memberModel->getMemberList();
+            return $this->fetch('add', compact('memberList'));
         }
-        $memberList = model('Member')->getMemberList();
-        $this->assign('memberList', $memberList);
-        $this->assign('data', $data);
-        return view();
     }
 
     /**
-     * 项目页面新增、编辑操作
-     * @return \think\response\View
+     * 编辑
+     * @return array|mixed
+     * @throws \think\exception\DbException
      */
-    function save()
+    function edit()
+    {
+        if (request()->isPost()) {
+            return $this->save($this->postData('post'));
+        } else {
+            $id = input('id');
+            $data = ProjectviewModel::detail($id);
+            $memberModel = new MemberModel;
+            $memberList = $memberModel->getMemberList();
+            return $this->fetch('edit', compact('data', 'memberList'));
+        }
+    }
+
+    /**
+     * 新增、编辑操作
+     * @param $post
+     * @return array
+     * @throws \think\exception\DbException
+     */
+    function save($post)
     {
         $rule = [
             ['title','require|max:25','标题名称不能为空|标题名称最多不能超过25个字符'],
+            ['member_id','require','会员不能为空'],
             ['project_ids','require','项目不能为空']
         ];
-        $validate = new Validate($rule);
-        $post = $this->postData('post');
-        if(!$validate->check($post)){
-            return ajax_return(1, $validate->getError());
+        $this->checkValidate($rule, $post);
+        $model = new ProjectviewModel;
+        $id = isset($post['id']) ? $post['id'] : '';
+        if (!$model->edit($id, $post)) {
+            return $this->renderError('操作失败');
         }
-        $id = input('id');
-        $map = array();
-        if($id) {
-            $map['id'] = $id;
-        }
-        $result = model('Projectview')->save($post, $map);
-        if ($result) {
-            return ajax_return(0, '保存成功', 'lists');
-        } else {
-            return ajax_return(1, '保存失败');
-        }
+        return $this->renderSuccess('操作成功');
     }
 
     /**
-     * 删除项目页面
-     * @return \think\response\Json
+     * 删除操作
+     * @param $id
+     * @return array
+     * @throws \think\exception\DbException
      */
-    function delete()
+    function delete($id)
     {
-        $id = input('id' );
-        $result = model('Projectview')->deleteById($id);
-        if($result) {
-            return ajax_return(0, '删除成功');
-        } else {
-            return ajax_return(1, '删除失败');
+        $model = ProjectviewModel::detail($id);
+        if(!$model->remove()) {
+            return $this->renderError('删除失败');
         }
+        return $this->renderSuccess('删除成功');
     }
 
 }

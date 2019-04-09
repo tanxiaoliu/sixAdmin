@@ -30,6 +30,7 @@
     {{#  } }}
 </script>
 <script type="text/html" id="optTpl">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">分配权限</a>
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
@@ -53,7 +54,7 @@
 
         table.render({
             elem: '#test'
-            ,url: '/admin/Role/getList'
+            ,url: '/admin/role/lists'
             ,page: true //开启分页
             ,cols: [[ //表头
                 {field: 'id', title: 'ID', width:60}
@@ -61,25 +62,22 @@
                 ,{field: 'remark', title: '备注'}
                 ,{field: 'status', title: '状态', templet: '#statusTpl'}
                 ,{field: 'create_time', title: '创建时间'}
-                ,{fixed: 'right', title:'操作', toolbar: '#optTpl', width:150}
-            ]],
-            done: function (res, curr, count) {
-                curr_page = curr;
-            }
+                ,{fixed: 'right', title:'操作', toolbar: '#optTpl', width:230}
+            ]]
         });
 
         //新增
         $("#table .add").click(function () {
-            edit("{:url('/admin/Role/add')}", '新增角色');
+            edit("{:url('/admin/role/add')}", '新增角色');
         });
 
         //监听行工具事件
         table.on('tool(test)', function(obj){
             var data = obj.data;
             if(obj.event === 'del'){
-                deleted("{:url('admin/Role/delete')}", obj)
+                deleted("{:url('admin/role/delete')}", obj)
             } else if(obj.event === 'edit'){
-                edit("{:url('/admin/Role/add/id/"+ data.id +"')}", '编辑' + data.role_name);
+                edit("{:url('/admin/role/edit/id/"+ data.id +"')}", '编辑' + data.role_name);
             }
         });
     });

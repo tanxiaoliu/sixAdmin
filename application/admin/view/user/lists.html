@@ -30,8 +30,10 @@
     {{#  } }}
 </script>
 <script type="text/html" id="optTpl">
+    {{#  if(d.id != 1){ }}
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    {{#  } }}
 </script>
 <script type="text/javascript">
     var curr_page;
@@ -53,12 +55,13 @@
 
         table.render({
             elem: '#test'
-            ,url: '/admin/User/getList'
+            ,url: '/admin/user/lists'
             ,page: true //开启分页
             ,cols: [[ //表头
                 {field: 'id', title: 'ID', width:60}
-                ,{field: 'user_name', title: '用户名', width:200}
+                ,{field: 'user_name', title: '账号', width:200}
                 ,{field: 'nickname', title: '用户昵称', width:200}
+                ,{field: 'role_name', title: '所属角色', width:200}
                 ,{field: 'phone', title: '联系电话'}
                 ,{field: 'email', title: '邮箱'}
                 ,{field: 'status', title: '状态', templet: '#statusTpl', width:80}
@@ -72,16 +75,16 @@
 
         //新增
         $("#table .add").click(function () {
-            edit("{:url('/admin/User/add')}", '新增用户');
+            edit("{:url('/admin/user/add')}", '新增用户');
         });
 
         //监听行工具事件
         table.on('tool(test)', function(obj){
             var data = obj.data;
             if(obj.event === 'del'){
-                deleted("{:url('admin/User/delete')}", obj)
+                deleted("{:url('admin/user/delete')}", obj)
             } else if(obj.event === 'edit'){
-                edit("{:url('/admin/User/add/id/"+ data.id +"')}", '编辑' + data.user_name);
+                edit("{:url('/admin/user/edit/id/"+ data.id +"')}", '编辑' + data.user_name);
             }
         });
     });
