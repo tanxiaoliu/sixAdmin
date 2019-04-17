@@ -1,4 +1,4 @@
-<div class="layui-card-body" id="alert_form" style="height: 380px">
+<div class="layui-card-body" id="alert_form">
     <form class="layui-form" action="" lay-filter="alert">
         <div class="layui-form-item">
             <label class="layui-form-label">权限名称</label>
@@ -7,9 +7,15 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">父级菜单id</label>
+            <label class="layui-form-label">父级菜单</label>
             <div class="layui-input-block">
-                <input type="text" name="parent_id" value="" autocomplete="off" lay-verify="required" class="layui-input">
+                <select name="parent_id" lay-verify="required" lay-search="">
+                    <option value="">直接选择或搜索选择</option>
+                    <option value="0">顶级菜单</option>
+                    {volist name="menu" id="vo"}
+                        <option value="{$vo.id}">丨---{$vo.power_name}</option>
+                    {/volist}
+                </select>
             </div>
         </div>
         <div class="layui-form-item">

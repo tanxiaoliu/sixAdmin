@@ -1,0 +1,62 @@
+<div class="layui-card-body" id="alert_form">
+    <div class="layui-form-item">
+        <div style="margin: 10px 80px 40px 80px;">
+            <ul id="tree" class="ztree"></ul>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="reset" id="auth-btn" class="layui-btn">提交</button>
+        </div>
+    </div>
+</div>
+<link rel="stylesheet" href="__STATIC__/admin/css/metroStyle/metroStyle.css" type="text/css">
+<script type="text/javascript" src="__STATIC__/admin/js/jquery-1.4.4.min.js"></script>
+<script type="text/javascript" src="__STATIC__/admin/js/jquery.ztree.core.min.js"></script>
+<script type="text/javascript" src="__STATIC__/admin/js/jquery.ztree.excheck.min.js"></script>
+<script type="text/javascript">
+
+    $(function(){
+        var tree = $("#tree");
+        var zTree;
+        var setting = {
+            check: {
+                enable: true
+            },
+            view: {
+                dblClickExpand: true,
+                showLine: true,
+                showIcon: true,
+                selectedMulti: false
+            },
+            data: {
+                simpleData: {
+                    enable: true,
+                    idKey: "id",
+                    pIdKey: "parent_id",
+                    rootpid: ""
+                },
+                key: {
+                    name: "power_name"
+                }
+            }
+        };
+        //加载树形菜单
+        zTree = $.fn.zTree.init(tree, setting, {$list});
+        zTree.expandAll(true);//默认打开
+        /**
+         * 授权提交
+         */
+        $("#auth-btn").bind("click", function (){
+            var checked_ids,power_ids = [];
+            checked_ids = zTree.getCheckedNodes(); // 获取当前选中的checkbox
+            $.each(checked_ids, function (index, item) {
+                power_ids.push(item.id);
+            });
+            var post = {};
+            post.power_ids = power_ids;
+            post.id = "{$id}";
+            submitPost('{:url("admin/power/updatePower")}', post);
+        });
+    })
+</script>

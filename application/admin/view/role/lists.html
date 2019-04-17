@@ -30,7 +30,7 @@
     {{#  } }}
 </script>
 <script type="text/html" id="optTpl">
-    <a class="layui-btn layui-btn-xs" lay-event="edit">分配权限</a>
+    <a class="layui-btn layui-btn-xs" lay-event="assign">分配权限</a>
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
@@ -78,6 +78,8 @@
                 deleted("{:url('admin/role/delete')}", obj)
             } else if(obj.event === 'edit'){
                 edit("{:url('/admin/role/edit/id/"+ data.id +"')}", '编辑' + data.role_name);
+            } else if(obj.event === 'assign'){
+                edit("{:url('/admin/power/allot/id/"+ data.id +"')}", '分配权限' + data.role_name);
             }
         });
     });

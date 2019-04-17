@@ -13,7 +13,6 @@ layui.use(['form','layer','table','element','laytpl'], function(){
  * @param obj
  */
 function deleted(url, obj) {
-    obj.del();
     layer.confirm('真的删除行么', function(index){
         $.ajax({
             type: 'POST',
@@ -23,7 +22,8 @@ function deleted(url, obj) {
                 id: obj.data.id
             },
             success: function (data) {
-                if(data.code == 0){
+                if(data.code == 0 && data.wait != 3){
+                    obj.del();
                     layer.msg(data.msg,{icon:6,time:2000}, function(){
                         layer.closeAll();
                     })
@@ -89,16 +89,28 @@ function submitPost(url, post) {
  * @returns {boolean}
  */
 function edit(url, title) {
+    if (title == null || title == '') {
+        title = false;
+    }
+    if (url == null || url == '') {
+        url = "404.html";
+    }
     var loading = layer.load();
     $.get(url, {}, function (str) {
-        layer.close(loading); 
-        layer.open({
-            title: title,
-            type: 1,
-            content: str
-        });
-        form.render(null, "alert");
+        layer.close(loading);
+        if(str.code == 0 && str.wait == 3){
+            layer.msg(str.msg, {icon: 5, time: 2000})
+        } else {
+            layer.open({
+                title: title,
+                type: 1,
+                content: str,
+                maxmin: true,
+                shadeClose: true,
+                shade: 0.2
+            });
+            form.render(null, "alert");
+        }
     });
     return false;
 }
-

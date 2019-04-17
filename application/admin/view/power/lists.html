@@ -53,7 +53,7 @@
         table.render({
             elem: '#test'
             ,url: '/admin/power/lists'
-            ,page: true //开启分页
+            // ,page: true //开启分页
             ,cols: [[ //表头
                 {field: 'id', title: 'ID', width:60}
                 ,{field: 'power_name', title: '权限名称', toolbar: '#powerTpl'}
@@ -64,9 +64,9 @@
                 ,{field: 'create_time', title: '创建时间', width:155}
                 ,{fixed: 'right', title:'操作', toolbar: '#optTpl', width:150}
             ]],
-            done: function (res, curr, count) {
-                curr_page = curr;
-            }
+            // done: function (res, curr, count) {
+            //     curr_page = curr;
+            // }
         });
 
         //新增

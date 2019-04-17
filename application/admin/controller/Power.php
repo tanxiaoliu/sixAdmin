@@ -2,6 +2,7 @@
 namespace app\admin\controller;
 
 use app\admin\model\Power as PowerModel;
+use app\admin\model\Role as RoleModel;
 
 /**
  * 权限管理
@@ -22,10 +23,8 @@ class Power extends Controller
     function lists()
     {
         if (request()->isAjax()) {
-            $page = input('page', 1);
-            $limit = input('limit', 20);
             $model = new PowerModel;
-            $list = $model->getList('', $page, $limit);
+            $list = $model->getList('','sort asc');
             return ajax_list($list);
         } else {
             return $this->fetch();
@@ -42,7 +41,9 @@ class Power extends Controller
         if (request()->isPost()) {
             return $this->save($this->postData('post'));
         } else {
-            return $this->fetch();
+            $model = new PowerModel;
+            $menu = $model->getOneMenu('', 'sort asc');
+            return $this->fetch('add', compact('menu'));
         }
     }
 
@@ -58,7 +59,9 @@ class Power extends Controller
         } else {
             $id = input('id');
             $data = PowerModel::detail($id);
-            return $this->fetch('edit', compact('data'));
+            $model = new PowerModel;
+            $menu = $model->getOneMenu('', 'sort asc');
+            return $this->fetch('edit', compact('data','menu'));
         }
     }
 
@@ -96,6 +99,40 @@ class Power extends Controller
             return $this->renderError('删除失败');
         }
         return $this->renderSuccess('删除成功');
+    }
+
+    /**
+     * 分配权限
+     * @param $id
+     * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
+    function allot($id)
+    {
+        $model = new PowerModel;
+        $list = $model->getPowerZTreeByRoleId($id);
+        return $this->fetch('allot', compact('list', 'id'));
+    }
+
+    /**
+     * 更新规则
+     * @return array
+     * @throws \think\exception\DbException
+     */
+    public function updatePower()
+    {
+        $post = $this->postData('post');
+        $post['power_ids'] = is_array($post['power_ids']) ? implode(',', $post['power_ids']) : '';
+        $roleModel = new RoleModel;
+        if (!$post['id']) {
+            return $this->renderError('操作失败，角色ID不能为空');
+        }
+        if (!$roleModel->edit($post['id'], $post)) {
+            return $this->renderError('操作失败');
+        }
+        return $this->renderSuccess('操作成功');
     }
 
 }
