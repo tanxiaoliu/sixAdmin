@@ -20,7 +20,6 @@ class Login extends Controller
      */
     function index()
     {
-//        echo password_hash('admin', PASSWORD_DEFAULT);
         if ($this->request->isPost()) {
             $post = $this->request->post();
             if (!captcha_check($post['captcha'])) {
