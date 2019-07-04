@@ -61,7 +61,7 @@ class Login extends Controller
      */
     function logout()
     {
-        Session::clear('admin_user');
+        Session::clear();
         $this->redirect('login/index');
     }
 

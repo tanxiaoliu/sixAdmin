@@ -35,11 +35,6 @@ class Controller extends \think\Controller
 
     /* @var array $allowAllAction 登录验证白名单 */
     protected $allowAllAction = [
-        // 登录页面
-        '/admin/login/index',
-        '/admin/login/logout',
-        '/admin/login/captcha',
-        '/admin/login/test',
         '/admin/index/index',
         '/admin/index/home',
     ];
@@ -49,14 +44,16 @@ class Controller extends \think\Controller
      */
     public function _initialize()
     {
-        // 后台用户登录信息
-        $this->user = Session::get('admin_user.user');
         // 当前路由信息
         $this->getRouteInfo();
-        // 验证登录
-        $this->checkAccess();
-        $this->assign('menus', json_encode($this->menus));
-        $this->assign('user', $this->user);
+        if($this->controller != 'login') {
+            // 后台用户登录信息
+            $this->user = Session::get('admin_user.user');
+            // 验证登录
+            $this->checkAccess();
+            $this->assign('menus', json_encode($this->menus));
+            $this->assign('user', $this->user);
+        }
     }
 
     /**
@@ -92,24 +89,23 @@ class Controller extends \think\Controller
     private function checkAccess()
     {
         // 验证当前模块是否是admin
-        if ($this->request->module() != 'admin' || !Session::has('admin_user')) {
+        if (($this->request->module() != 'admin' || !Session::has('admin_user'))) {
             $this->redirect('Login/index');
             return false;
-        }
-
-        //获取用户菜单
-        $this->menus();
-
-        // 如果用户id是1，则无需判断
-        if ($this->user['user_id'] == 1) {
-            return true;
         } else {
-            //判断用户的权限URI，验证当前请求是否在白名单
-            if (in_array($this->routeUri, $this->uris) || in_array($this->routeUri, $this->allowAllAction)) {
+            //获取用户菜单
+            $this->menus();
+            // 如果用户id是1，则无需判断
+            if ($this->user['user_id'] == 1) {
                 return true;
             } else {
-                $this->error('无权限操作','admin/index/index');
-                return false;
+                //判断用户的权限URI，验证当前请求是否在白名单
+                if (in_array($this->routeUri, $this->uris) || in_array($this->routeUri, $this->allowAllAction)) {
+                    return true;
+                } else {
+                    $this->error('无权限操作', 'admin/index/index');
+                    return false;
+                }
             }
         }
     }

@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2019-05-05 14:39:27
+Date: 2019-07-04 11:16:15
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -103,7 +103,7 @@ CREATE TABLE `k_project` (
 INSERT INTO `k_project` VALUES ('5', '王企鹅无群二二', '王企鹅二', '/uploads/project/20190318/1c6c7e94dfe730ab6eaf9af07beb6fd9.jpg', '王企鹅二恶烷若', '1552900126', '1552908802', null, '0');
 INSERT INTO `k_project` VALUES ('6', '123', '123', '/uploads/project/20190318/df5bcd99e0bbce0a35e19bdd8decc2f7.jpg', '213', '1552901439', '1552908794', null, '0');
 INSERT INTO `k_project` VALUES ('7', '56', '565463', '/uploads/project/20190318/666d5809b24a312aed7cbef32273a078.jpg', '4546', '1552903506', '1553146722', null, '1');
-INSERT INTO `k_project` VALUES ('8', '3243266', '2342', '/uploads/project/20190318/1d3ff09d7614d3b63542f871c77ae1be.jpg', '234234', '0', '1554359853', null, '2');
+INSERT INTO `k_project` VALUES ('8', '3243266', '2342', '/uploads/project/20190318/1d3ff09d7614d3b63542f871c77ae1be.jpg', '234234', '0', '1562209298', null, '1');
 
 -- ----------------------------
 -- Table structure for k_project_view
