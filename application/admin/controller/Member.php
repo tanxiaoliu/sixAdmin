@@ -19,7 +19,7 @@ class Member extends Controller
      * @throws \think\db\exception\ModelNotFoundException
      * @throws \think\exception\DbException
      */
-    function lists()
+    function lists(MemberModel $model)
     {
         if (request()->isAjax()) {
             $page = input('page', 1);
@@ -29,7 +29,6 @@ class Member extends Controller
             if($keyword){
                 $map['member_name'] = array('like', '%'.$keyword.'%');
             }
-            $model = new MemberModel;
             $list = $model->getList($map, $page, $limit);
             return ajax_list($list);
         } else {

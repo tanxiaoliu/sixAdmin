@@ -20,10 +20,9 @@ class Power extends Controller
      * @throws \think\db\exception\ModelNotFoundException
      * @throws \think\exception\DbException
      */
-    function lists()
+    function lists(PowerModel $model)
     {
         if (request()->isAjax()) {
-            $model = new PowerModel;
             $list = $model->getList('','sort asc');
             return ajax_list($list);
         } else {
@@ -36,12 +35,11 @@ class Power extends Controller
      * @return array|mixed
      * @throws \think\exception\DbException
      */
-    function add()
+    function add(PowerModel $model)
     {
         if (request()->isPost()) {
             return $this->save($this->postData('post'));
         } else {
-            $model = new PowerModel;
             $menu = $model->getOneMenu('', 'sort asc');
             return $this->fetch('add', compact('menu'));
         }
@@ -52,14 +50,13 @@ class Power extends Controller
      * @return array|mixed|\think\response\Json
      * @throws \think\exception\DbException
      */
-    function edit()
+    function edit(PowerModel $model)
     {
         if (request()->isPost()) {
             return $this->save($this->postData('post'));
         } else {
             $id = input('id');
             $data = PowerModel::detail($id);
-            $model = new PowerModel;
             $menu = $model->getOneMenu('', 'sort asc');
             return $this->fetch('edit', compact('data','menu'));
         }

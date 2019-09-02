@@ -19,12 +19,11 @@ class Role extends Controller
      * @throws \think\db\exception\ModelNotFoundException
      * @throws \think\exception\DbException
      */
-    function lists()
+    function lists(RoleModel $model)
     {
         if (request()->isAjax()) {
             $page = input('page', 1);
             $limit = input('limit', 20);
-            $model = new RoleModel;
             $list = $model->getList('', $page, $limit);
             return ajax_list($list);
         } else {

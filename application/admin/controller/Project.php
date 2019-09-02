@@ -20,7 +20,7 @@ class Project extends Controller
      * @throws \think\db\exception\ModelNotFoundException
      * @throws \think\exception\DbException
      */
-    function lists()
+    function lists(ProjectModel $model)
     {
         if (request()->isAjax()) {
             $page = input('page', 1);
@@ -35,7 +35,6 @@ class Project extends Controller
                     $map['b.member_name'] = array('like', '%' . $keyword . '%');
                 }
             }
-            $model = new ProjectModel;
             $list = $model->getList($map, $page, $limit);
             return ajax_list($list);
         } else {
@@ -50,12 +49,11 @@ class Project extends Controller
      * @throws \think\db\exception\ModelNotFoundException
      * @throws \think\exception\DbException
      */
-    function add()
+    function add(MemberModel $memberModel)
     {
         if (request()->isPost()) {
             return $this->save($this->postData('post'));
         } else {
-            $memberModel = new MemberModel;
             $memberList = $memberModel->getMemberList();
             return $this->fetch('add', compact('memberList'));
         }
@@ -66,14 +64,13 @@ class Project extends Controller
      * @return array|mixed
      * @throws \think\exception\DbException
      */
-    function edit()
+    function edit(MemberModel $memberModel)
     {
         if (request()->isPost()) {
             return $this->save($this->postData('post'));
         } else {
             $id = input('id');
             $data = ProjectModel::detail($id);
-            $memberModel = new MemberModel;
             $memberList = $memberModel->getMemberList();
             return $this->fetch('edit', compact('data', 'memberList'));
         }

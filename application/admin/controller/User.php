@@ -20,12 +20,11 @@ class User extends Controller
      * @throws \think\db\exception\ModelNotFoundException
      * @throws \think\exception\DbException
      */
-    function lists()
+    function lists(UserModel $model)
     {
         if (request()->isAjax()) {
             $page = input('page', 1);
             $limit = input('limit', 20);
-            $model = new UserModel;
             $list = $model->getList('', $page, $limit);
             return ajax_list($list);
         } else {
@@ -40,12 +39,11 @@ class User extends Controller
      * @throws \think\db\exception\ModelNotFoundException
      * @throws \think\exception\DbException
      */
-    function add()
+    function add(RoleModel $roleModel)
     {
         if (request()->isPost()) {
             return $this->save($this->postData('post'));
         } else {
-            $roleModel = new RoleModel;
             $roleList = $roleModel->getRoleByStatus();
             return $this->fetch('add', compact('roleList'));
         }
@@ -56,15 +54,14 @@ class User extends Controller
      * @return array|mixed
      * @throws \think\exception\DbException
      */
-    function edit()
+    function edit(RoleModel $roleModel)
     {
         if (request()->isPost()) {
             return $this->save($this->postData('post'));
         } else {
             $id = input('id');
             $data = UserModel::detail($id);
-            $roleList = new RoleModel;
-            $roleList = $roleList->getRoleByStatus();
+            $roleList = $roleModel->getRoleByStatus();
             return $this->fetch('edit', compact('data', 'roleList'));
         }
     }

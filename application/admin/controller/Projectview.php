@@ -20,7 +20,7 @@ class Projectview extends Controller
      * @throws \think\db\exception\ModelNotFoundException
      * @throws \think\exception\DbException
      */
-    function lists()
+    function lists(ProjectviewModel $model)
     {
         if (request()->isAjax()) {
             $page = input('page', 1);
@@ -30,7 +30,6 @@ class Projectview extends Controller
             if($keyword){
                 $map['title'] = array('like', '%' . $keyword . '%');
             }
-            $model = new ProjectviewModel;
             $list = $model->getList($map, $page, $limit);
             return ajax_list($list);
         } else {
@@ -45,12 +44,11 @@ class Projectview extends Controller
      * @throws \think\db\exception\ModelNotFoundException
      * @throws \think\exception\DbException
      */
-    function add()
+    function add(MemberModel $memberModel)
     {
         if (request()->isPost()) {
             return $this->save($this->postData('post'));
         } else {
-            $memberModel = new MemberModel;
             $memberList = $memberModel->getMemberList();
             return $this->fetch('add', compact('memberList'));
         }
@@ -61,14 +59,13 @@ class Projectview extends Controller
      * @return array|mixed
      * @throws \think\exception\DbException
      */
-    function edit()
+    function edit(MemberModel $memberModel)
     {
         if (request()->isPost()) {
             return $this->save($this->postData('post'));
         } else {
             $id = input('id');
             $data = ProjectviewModel::detail($id);
-            $memberModel = new MemberModel;
             $memberList = $memberModel->getMemberList();
             return $this->fetch('edit', compact('data', 'memberList'));
         }

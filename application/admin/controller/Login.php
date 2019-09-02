@@ -4,6 +4,7 @@ namespace app\admin\controller;
 use think\captcha\Captcha;
 use think\Cookie;
 use think\Session;
+use app\admin\model\User as UserModel;
 
 /**
  * 后台登录
@@ -18,7 +19,7 @@ class Login extends Controller
      * 登陆
      * @return array|\think\response\View
      */
-    function index()
+    function index(UserModel $userModel)
     {
         if ($this->request->isPost()) {
             $post = $this->request->post();
@@ -29,7 +30,7 @@ class Login extends Controller
                 return $this->renderError('账号或密码不能为空');
             }
             //查询用户
-            $user = model('User')->getUserByUserName($post['user_name']);
+            $user = $userModel->getUserByUserName($post['user_name']);
             if (empty($user) || $user['status'] == 1) {
                 return $this->renderError('登录失败, 账号或密码错误');
             }
