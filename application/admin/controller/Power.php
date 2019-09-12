@@ -72,7 +72,6 @@ class Power extends Controller
     {
         $rule = [
             ['power_name','require','权限名称不能为空'],
-            ['uri','require','uri名称不能为空'],
         ];
         $this->checkValidate($rule, $post);
         $model = new PowerModel;

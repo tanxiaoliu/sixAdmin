@@ -3,11 +3,11 @@
     <div class="layui-header">
         <!-- 头部区域 -->
         <ul class="layui-nav layui-layout-left">
-           <!--  <li class="layui-nav-item layadmin-flexible" lay-unselect="">
-                <a href="javascript:;" layadmin-event="flexible" title="侧边伸缩">
+           <li class="layui-nav-item layadmin-flexible" lay-unselect="">
+                <a href="javascript:flexible();" layadmin-event="flexible" title="侧边伸缩">
                     <i class="layui-icon layui-icon-shrink-right" id="LAY_app_flexible"></i>
                 </a>
-            </li> -->
+            </li>
             <li class="layui-nav-item layui-hide-xs" lay-unselect="">
                 <a href="#" target="_blank">
                     <i class="layui-icon layui-icon-website"></i> 网站
@@ -32,12 +32,11 @@
     <!-- 侧边菜单 -->
     <div class="layui-side layui-side-menu">
         <div class="layui-side-scroll">
-            <div class="layui-logo" lay-href=""> <span>xx-管理后台</span> </div>
-            <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
+            <div class="layui-logo" lay-href=""><span>XX管理平台</span></div>
+            <ul class="layui-nav layui-nav-tree " lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
             </ul>
         </div>
     </div>
-
 
     <!-- 页面标签 -->
     <div class="layui-tab" lay-unauto="" lay-allowclose="true" lay-filter="layadmin-layout-tabs">
@@ -52,7 +51,6 @@
         </div>
         <!-- tabcontent end -->
     </div>
-
 
     <!-- 辅助元素，一般用于移动设备下遮罩 -->
     <div class="layadmin-body-shade" layadmin-event="shade"></div>
@@ -78,36 +76,67 @@
 <script>
     var form,element,layer,layedit,table,laydate;
     var tabArray = new Array();
-    layui.use(['form','layer','table','element','laytpl','layedit','laydate'], function(){
-      element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
-      layer = layui.layer;
-      form = layui.form;
-      layedit = layui.layedit;
-      table = layui.table;
-      laydate = layui.laydate;
-      var laytpl = layui.laytpl;
+    layui.use(['form','layer','table','element','laytpl','layedit','laydate'], function() {
+        element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+        layer = layui.layer;
+        form = layui.form;
+        layedit = layui.layedit;
+        table = layui.table;
+        laydate = layui.laydate;
+        var laytpl = layui.laytpl;
 
-    //左侧菜单
-    var navdata = {$menus};
-    var getTpl = navTpl.innerHTML, navdom = document.getElementById('LAY-system-side-menu');
-    laytpl(getTpl).render(navdata, function(html){
-      navdom.innerHTML = html;
-      element.render('nav');
+        //左侧菜单
+        var navdata = {$menus};
+        var getTpl = navTpl.innerHTML, navdom = document.getElementById('LAY-system-side-menu');
+        laytpl(getTpl).render(navdata, function (html) {
+            navdom.innerHTML = html;
+            element.render('nav');
+        });
+
+        //打开页面
+        $(".layui-nav-child a").click(function () {
+            flexible(1);
+            var _this = $(this);
+            var title = _this.text();
+            var url = _this.attr('data-url');
+            open_tab(title, url);
+        });
+
+        //监听页面关闭
+        element.on('tabDelete(layadmin-layout-tabs)', function (data) {
+            tabArray.splice(data.index - 1, 1);
+        });
+
     });
 
-    //打开页面
-    $(".layui-nav-child a").click(function(){
-      var _this=$(this);
-      var title = _this.text();
-      var url = _this.attr('data-url');
-      open_tab(title, url);
+    //左侧收缩
+    function flexible(type) {
+        var dom = $('.layui-layout-body');
+        var str = 'layadmin-side-shrink';
+        var width1 = '220px';
+        var width2 = '60px';
+        if (navigator.userAgent.match(/mobile/i)) {
+            var str = 'layadmin-side-spread-sm';
+            var width1 = '60px';
+            var width2 = '220px';
+        }
+        if (dom.hasClass(str) || type == 1) {
+            dom.removeClass(str);
+            // $('.layui-side-menu').css('width', width1);
+            $('#LAY_app_flexible').addClass('layui-icon-shrink-right');
+            $('#LAY_app_flexible').removeClass('layui-icon-spread-left');
+        } else {
+            dom.addClass(str);
+            // $('.layui-side-menu').css('width', width2);
+            $('#LAY_app_flexible').removeClass('layui-icon-shrink-right');
+            $('#LAY_app_flexible').addClass('layui-icon-spread-left');
+        }
+    }
+    $('.layui-logo').click(function () {
+        flexible(1);
     });
-
-    //监听页面关闭
-    element.on('tabDelete(layadmin-layout-tabs)', function(data){
-      tabArray.splice(data.index-1,1);
-    });
-
+    $('.layadmin-body-shade').click(function () {
+        flexible(1);
     });
 
     //刷新

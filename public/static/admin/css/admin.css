@@ -49,6 +49,9 @@ html {
 .layadmin-pagetabs,.layui-layout-admin .layui-body,.layui-layout-admin .layui-footer,.layui-layout-admin .layui-layout-left {
 	left:220px
 }
+.layui-layout-left{
+	width: 260px;
+}
 .layadmin-pagetabs {
 	position:fixed;
 	top:50px;
@@ -249,53 +252,6 @@ html {
 .layadmin-pagetabs,.layui-layout-admin .layui-body,.layui-layout-admin .layui-footer,.layui-layout-admin .layui-layout-left {
 	left:0
 }
-}.layadmin-side-shrink .layui-layout-admin .layui-logo {
-	width:60px;
-	background-image:url('res/logo.png')
-}
-.layadmin-side-shrink .layui-layout-admin .layui-logo span {
-	display:none
-}
-.layadmin-side-shrink .layui-side {
-	left:0;
-	width:60px
-}
-.layadmin-side-shrink .layadmin-pagetabs,.layadmin-side-shrink .layui-layout-admin .layui-body,.layadmin-side-shrink .layui-layout-admin .layui-footer,.layadmin-side-shrink .layui-layout-admin .layui-layout-left {
-	left:60px
-}
-.layadmin-side-shrink .layui-side-menu .layui-nav {
-	position:static;
-	width:60px
-}
-.layadmin-side-shrink .layui-side-menu .layui-nav-item {
-	position:static
-}
-.layadmin-side-shrink .layui-side-menu .layui-nav-item>a {
-	padding-right:0
-}
-.layadmin-side-shrink .layui-side-menu .layui-nav-item cite,.layadmin-side-shrink .layui-side-menu .layui-nav>.layui-nav-item>.layui-nav-child,.layadmin-side-shrink .layui-side-menu .layui-nav>.layui-nav-item>a .layui-nav-more {
-	display:none;
-	padding:8px 0;
-	width:200px
-}
-.layadmin-side-shrink .layui-side-menu .layui-nav>.layui-nav-itemed>a {
-	background:rgba(0,0,0,.3)
-}
-.layadmin-side-spread-sm .layadmin-pagetabs,.layadmin-side-spread-sm .layui-layout-admin .layui-body,.layadmin-side-spread-sm .layui-layout-admin .layui-footer,.layadmin-side-spread-sm .layui-layout-admin .layui-layout-left {
-	left:0;
-	transform:translate3d(220px,0,0);
-	-webkit-transform:translate3d(220px,0,0)
-}
-.layadmin-side-spread-sm .layui-layout-admin .layui-layout-right {
-	transform:translate3d(220px,0,0);
-	-webkit-transform:translate3d(220px,0,0)
-}
-.layadmin-side-spread-sm .layui-side {
-	transform:translate3d(0,0,0);
-	-webkit-transform:translate3d(0,0,0)
-}
-.layadmin-side-spread-sm .layadmin-body-shade {
-	display:block
 }
 .layadmin-pagetabs.layui-tab-title li:first-child .layui-tab-close,.layadmin-tabs-select.layui-nav .layui-nav-bar,.layadmin-tabs-select.layui-nav .layui-nav-more {
 	display:none
@@ -303,7 +259,7 @@ html {
 .layadmin-pagetabs {
 	height:40px;
 	line-height:40px;
-	padding:0 80px 0 40px;
+	padding:0 80px 0 15px;
 	background-color:#fff;
 	box-sizing:border-box;
 	box-shadow:0 1px 2px 0 rgba(0,0,0,.1)
@@ -491,13 +447,18 @@ html {
 .layadmin-header .layui-breadcrumb {
 	padding:0 15px
 }
-.layui-card-header .layui-icon {
-	line-height:initial;
-	position:absolute;
-	right:15px;
-	top:50%;
-	margin-top:-7px
-}
+/*.layui-card-header .layui-icon {*/
+	/*line-height:initial;*/
+	/*position:absolute;*/
+	/*right:15px;*/
+	/*top:50%;*/
+	/*margin-top:-7px*/
+/*}*/
+ .layui-card-header.layuiadmin-card-header-auto {
+	 padding-top: 15px;
+	 /*padding-bottom: 15px;*/
+	 height: auto;
+ }
 .layadmin-iframe {
 	position:absolute;
 	width:100%;
@@ -885,19 +846,19 @@ to {
 }
 @media screen and (max-width:768px) {
 	.layadmin-panel-selection {
-	margin:0;
-	width:auto
+		margin:0;
+		width:auto
+	}
+	.layui-body .layui-nav .layui-nav-item {
+		display:block
+	}
 }
-.layui-body .layui-nav .layui-nav-item {
-	display:block
-}
-}.layui-card-form {
+ .layui-card-form {
 	padding:15px 15px 0;
 }
 .layui-card-form .layui-input,.layui-card-form select {
 	width:auto;
 	display:inline-block;
-	height:30px;
 	border-color:#e6e6e6;
 	border-radius:2px;
 	padding-left:5px;
@@ -972,4 +933,65 @@ to {
  }
  .layui-table-cell{
  	padding: 0 10px;
+ }
+
+ /*PC端左侧菜单切换*/
+ .layadmin-side-shrink .layui-side-scroll .layui-logo {
+	 width: 60px;
+	 background-image: url(../images/logo.png)
+ }
+
+ .layadmin-side-shrink .layui-side-scroll .layui-logo span {
+	 display: none
+ }
+
+ .layadmin-side-shrink {
+	 left: 0;
+ }
+
+ .layadmin-side-shrink .layui-side-menu {
+	 width: 60px;
+ }
+
+ .layadmin-side-shrink,.layadmin-side-shrink .layadmin-pagetabs,.layadmin-side-shrink .layui-body,.layadmin-side-shrink .layui-footer,.layadmin-side-shrink .layui-layout-left {
+	 left: 60px
+ }
+
+ .layadmin-side-shrink .layui-side-menu .layui-nav-item {
+	 position: static
+ }
+
+ .layadmin-side-shrink .layui-side-menu .layui-nav-item>a {
+	 padding-right: 0
+ }
+
+ .layadmin-side-shrink .layui-side-menu .layui-nav-item cite, .layadmin-side-shrink .layui-side-menu .layui-nav-child dd,.layadmin-side-shrink .layui-side-menu .layui-nav-child,.layadmin-side-shrink .layui-side-menu .layui-nav-more {
+	 display: none;
+	 padding: 8px 0;
+	 width: 200px
+ }
+
+ .layadmin-side-shrink .layui-side-menu .layui-nav>.layui-nav-itemed>a {
+	 background: rgba(0,0,0,.3)
+ }
+
+ /*WAP端左侧菜单切换*/
+ .layadmin-side-spread-sm .layadmin-pagetabs,.layadmin-side-spread-sm .layui-layout-admin .layui-body,.layadmin-side-spread-sm .layui-layout-admin .layui-footer,.layadmin-side-spread-sm .layui-layout-admin .layui-layout-left {
+	 left: 0;
+	 transform: translate3d(220px,0,0);
+	 -webkit-transform: translate3d(220px,0,0)
+ }
+
+ .layadmin-side-spread-sm .layui-layout-admin .layui-layout-right {
+	 transform: translate3d(220px,0,0);
+	 -webkit-transform: translate3d(220px,0,0)
+ }
+
+ .layadmin-side-spread-sm .layui-side {
+	 transform: translate3d(0,0,0);
+	 -webkit-transform: translate3d(0,0,0)
+ }
+
+ .layadmin-side-spread-sm .layadmin-body-shade {
+	 display: block
  }
