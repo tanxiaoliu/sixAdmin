@@ -3,6 +3,7 @@ namespace app\admin\controller;
 
 use think\captcha\Captcha;
 use think\Cookie;
+use think\Log;
 use think\Session;
 use app\admin\model\User as UserModel;
 
@@ -79,5 +80,14 @@ class Login extends Controller
         ];
         $captcha = new Captcha($config);
         return $captcha->entry();
+    }
+
+    /**
+     * GRPC测试
+     */
+    function grpc()
+    {
+        //echo 'GRPC调用测试'.date('Y-m-d H:i:s');
+        echo json_encode($_POST);
     }
 }
