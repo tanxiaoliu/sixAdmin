@@ -10,10 +10,26 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2019-07-04 11:16:15
+Date: 2019-09-16 11:45:08
 */
 
 SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for k_config
+-- ----------------------------
+DROP TABLE IF EXISTS `k_config`;
+CREATE TABLE `k_config` (
+  `id` int(11) NOT NULL,
+  `name` varchar(20) NOT NULL DEFAULT '' COMMENT '系统标题',
+  `copr` varchar(50) NOT NULL DEFAULT '' COMMENT '系统版权',
+  `home` varchar(120) NOT NULL DEFAULT '' COMMENT '主页地址',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='配置表';
+
+-- ----------------------------
+-- Records of k_config
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for k_member
@@ -29,7 +45,7 @@ CREATE TABLE `k_member` (
   `update_time` int(10) NOT NULL DEFAULT '0' COMMENT '更新时间',
   `delete_time` int(10) DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='会员表';
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='会员表';
 
 -- ----------------------------
 -- Records of k_member
@@ -43,6 +59,7 @@ INSERT INTO `k_member` VALUES ('6', '123', '', '', '', '1553823554', '1553827539
 INSERT INTO `k_member` VALUES ('7', '234', '', '', '', '1553823571', '1553827458', '1553827458');
 INSERT INTO `k_member` VALUES ('8', '345', '', '', '', '1553823588', '1553827454', '1553827454');
 INSERT INTO `k_member` VALUES ('9', '234', '', '', '', '1553849581', '1555986607', '1555986607');
+INSERT INTO `k_member` VALUES ('10', '刘烨', '13255474547', '5656@qq.com', '北京路21号', '1562234942', '1562234953', null);
 
 -- ----------------------------
 -- Table structure for k_power
@@ -62,14 +79,14 @@ CREATE TABLE `k_power` (
   `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '权限类型:菜单0 按钮1',
   PRIMARY KEY (`id`),
   KEY `ind_type_parent_id` (`type`,`parent_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='权限表';
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='权限表';
 
 -- ----------------------------
 -- Records of k_power
 -- ----------------------------
 INSERT INTO `k_power` VALUES ('1', '项目管理', '0', '', 'template-1', '0', '0', null, '100', null, '0');
 INSERT INTO `k_power` VALUES ('2', '系统管理', '0', '', 'set', '0', '0', null, '300', null, '0');
-INSERT INTO `k_power` VALUES ('3', '项目列表', '1', '/admin/project/lists', '', '0', '0', null, '100', null, '0');
+INSERT INTO `k_power` VALUES ('3', '项目列表', '1', '/admin/project/lists', '', '0', '1562234444', null, '100', null, '0');
 INSERT INTO `k_power` VALUES ('4', '项目页面列表', '1', '/admin/projectview/lists', '', '0', '0', null, '200', null, '0');
 INSERT INTO `k_power` VALUES ('5', '用户管理', '2', '/admin/user/lists', '', '0', '0', null, '0', null, '0');
 INSERT INTO `k_power` VALUES ('7', '权限管理', '2', '/admin/power/lists', '', '0', '0', null, '0', null, '0');
@@ -78,6 +95,8 @@ INSERT INTO `k_power` VALUES ('9', '会员管理', '0', '', 'user', '0', '0', nu
 INSERT INTO `k_power` VALUES ('10', '会员列表', '9', '/admin/member/lists', '', '0', '0', null, '0', null, '0');
 INSERT INTO `k_power` VALUES ('11', '新增会员', '10', '/admin/member/add', '', '0', '0', null, '0', null, '1');
 INSERT INTO `k_power` VALUES ('12', '编辑会员', '10', '/admin/member/edit', '', '0', '0', null, '0', null, '1');
+INSERT INTO `k_power` VALUES ('13', '主页', '0', '', 'layui-icon-home', '1568254479', '1568254706', '1568254706', '0', null, '0');
+INSERT INTO `k_power` VALUES ('14', '控制台', '0', '/admin/index/home', '', '1568254615', '1568604085', null, '0', null, '1');
 
 -- ----------------------------
 -- Table structure for k_project
@@ -103,7 +122,7 @@ CREATE TABLE `k_project` (
 INSERT INTO `k_project` VALUES ('5', '王企鹅无群二二', '王企鹅二', '/uploads/project/20190318/1c6c7e94dfe730ab6eaf9af07beb6fd9.jpg', '王企鹅二恶烷若', '1552900126', '1552908802', null, '0');
 INSERT INTO `k_project` VALUES ('6', '123', '123', '/uploads/project/20190318/df5bcd99e0bbce0a35e19bdd8decc2f7.jpg', '213', '1552901439', '1552908794', null, '0');
 INSERT INTO `k_project` VALUES ('7', '56', '565463', '/uploads/project/20190318/666d5809b24a312aed7cbef32273a078.jpg', '4546', '1552903506', '1553146722', null, '1');
-INSERT INTO `k_project` VALUES ('8', '3243266', '2342', '/uploads/project/20190318/1d3ff09d7614d3b63542f871c77ae1be.jpg', '234234', '0', '1562209298', null, '1');
+INSERT INTO `k_project` VALUES ('8', '黄工一中', '2342', '/uploads/project/20190318/1d3ff09d7614d3b63542f871c77ae1be.jpg', '2342341', '0', '1568601515', null, '1');
 
 -- ----------------------------
 -- Table structure for k_project_view
