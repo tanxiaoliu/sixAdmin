@@ -25,15 +25,14 @@ class Project extends Controller
         if (request()->isAjax()) {
             $page = input('page', 1);
             $limit = input('limit', 20);
-            $searchType = input('search_type', 0);
-            $keyword= input('keyword');
+            $projectName = input('project_name');
+            $memberName = input('member_name');
             $map = array();
-            if($keyword){
-                if($searchType == 0) {
-                    $map['a.project_name'] = array('like', '%' . $keyword . '%');
-                } else {
-                    $map['b.member_name'] = array('like', '%' . $keyword . '%');
-                }
+            if($projectName){
+                $map['a.project_name'] = array('like', '%' . $projectName . '%');
+            }
+            if($memberName){
+                $map['b.member_name'] = array('like', '%' . $memberName . '%');
             }
             $list = $model->getList($map, $page, $limit);
             return ajax_list($list);

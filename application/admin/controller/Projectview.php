@@ -25,10 +25,10 @@ class Projectview extends Controller
         if (request()->isAjax()) {
             $page = input('page', 1);
             $limit = input('limit', 20);
-            $keyword= input('keyword');
+            $title = input('title');
             $map = array();
-            if($keyword){
-                $map['title'] = array('like', '%' . $keyword . '%');
+            if($title){
+                $map['title'] = array('like', '%' . $title . '%');
             }
             $list = $model->getList($map, $page, $limit);
             return ajax_list($list);

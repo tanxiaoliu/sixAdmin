@@ -1,24 +1,12 @@
 {include file="admin@public/header" /}
-<style type="text/css">
-    .layui-table-cell{
-        height: auto;
-    }
-</style>
 <body>
 <div class="layui-fluid">
-    <div class="layui-row">
-        <div class="layui-card" id="table">
-            <div class="layui-card-form layui-clear">
-                <!-- 功能按钮。注意代码，两个button间不能空格 -->
-                <div class="btn-content">
-                    <div class="layui-btn-group">
-                        <button class="layui-btn layui-btn-primary layui-btn-sm add">新增</button>
-                    </div>
-                </div>
+    <div class="layui-card" id="table">
+        <div class="layui-card-body">
+            <div>
+                <button class="layui-btn" data-type="add">添加</button>
             </div>
-            <div class="layui-card-body">
-                <table class="layui-table" id="test" lay-filter="test"></table>
-            </div>
+            <table class="layui-table" id="test" lay-filter="test"></table>
         </div>
     </div>
 </div>
@@ -49,11 +37,9 @@
 <script type="text/javascript">
     layui.use(['laydate', 'table'], function() {
         var table = layui.table;
-
         table.render({
             elem: '#test'
             ,url: '/admin/power/lists'
-            // ,page: true //开启分页
             ,cols: [[ //表头
                 {field: 'id', title: 'ID', width:60}
                 ,{field: 'power_name', title: '权限名称', toolbar: '#powerTpl'}
@@ -63,15 +49,14 @@
                 ,{field: 'sort', title: '排序', width:100}
                 ,{field: 'create_time', title: '创建时间', width:155}
                 ,{fixed: 'right', title:'操作', toolbar: '#optTpl', width:150}
-            ]],
-            // done: function (res, curr, count) {
-            //     curr_page = curr;
-            // }
+            ]]
         });
 
-        //新增
-        $("#table .add").click(function () {
-            edit("{:url('/admin/power/add')}", '新增权限');
+        $('.layui-btn').click(function () {
+            var type = $(this).data('type');
+            if(type == 'add'){
+                edit("{:url('/admin/power/add')}", '新增权限');
+            }
         });
 
         //监听行工具事件

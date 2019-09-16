@@ -24,10 +24,10 @@ class Member extends Controller
         if (request()->isAjax()) {
             $page = input('page', 1);
             $limit = input('limit', 20);
-            $keyword = input('keyword');
+            $memberName = input('member_name');
             $map = array();
-            if($keyword){
-                $map['member_name'] = array('like', '%'.$keyword.'%');
+            if($memberName){
+                $map['member_name'] = array('like', '%'.$memberName.'%');
             }
             $list = $model->getList($map, $page, $limit);
             return ajax_list($list);

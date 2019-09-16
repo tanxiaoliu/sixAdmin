@@ -112,26 +112,27 @@
     //左侧收缩
     function flexible(type) {
         var dom = $('.layui-layout-body');
-        var str = 'layadmin-side-shrink';
-        var width1 = '220px';
-        var width2 = '60px';
-        if (navigator.userAgent.match(/mobile/i)) {
+        var flexible = $('#LAY_app_flexible');
+        if (document.body.clientWidth < 993) {
             var str = 'layadmin-side-spread-sm';
-            var width1 = '60px';
-            var width2 = '220px';
+        } else {
+            var str = 'layadmin-side-shrink';
         }
         if (dom.hasClass(str) || type == 1) {
             dom.removeClass(str);
-            // $('.layui-side-menu').css('width', width1);
-            $('#LAY_app_flexible').addClass('layui-icon-shrink-right');
-            $('#LAY_app_flexible').removeClass('layui-icon-spread-left');
+            flexible.addClass('layui-icon-shrink-right');
+            flexible.removeClass('layui-icon-spread-left');
         } else {
             dom.addClass(str);
-            // $('.layui-side-menu').css('width', width2);
-            $('#LAY_app_flexible').removeClass('layui-icon-shrink-right');
-            $('#LAY_app_flexible').addClass('layui-icon-spread-left');
+            flexible.removeClass('layui-icon-shrink-right');
+            flexible.addClass('layui-icon-spread-left');
         }
     }
+    $('#LAY-system-side-menu').click(function () {
+        if (document.body.clientWidth > 993) {
+            flexible(1);
+        }
+    });
     $('.layui-logo').click(function () {
         flexible(1);
     });

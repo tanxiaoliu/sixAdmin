@@ -1,28 +1,28 @@
 {include file="admin@public/header" /}
 <body>
 <div class="layui-fluid">
-    <div class="layui-row">
-        <div class="layui-card" id="table">
-            <div class="layui-card-form layui-clear">
-                <!-- 功能按钮。注意代码，两个button间不能空格 -->
-                <div class="btn-content">
-                    <div class="layui-btn-group">
-                        <button class="layui-btn layui-btn-primary layui-btn-sm add">新增</button>
-                    </div>
+    <div class="layui-card" id="table">
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <!-- 筛选区 -->
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">标题名称</label>
+                    <div class="layui-input-block"><input type="text" class="layui-input" id="title" name="title" placeholder="标题名称"></div>
                 </div>
+                <div class="layui-inline">
+                    <button class="layui-btn" onclick="search(1)">
+                        <i class="layui-icon layui-icon-search"></i>
+                    </button>
+                </div>
+            </div>
 
-                <!-- 筛选区 -->
-                <div class="search-content">
-                    标题名称
-                        <div class="layui-inline">
-                            <input class="layui-input" name="keyword" id="keyword" autocomplete="off">
-                        </div>
-                    <button class="layui-btn layui-btn-sm search" onclick="search(1)"><i class="layui-icon layui-icon-search layuiadmin-button-btn"></i></button>
-                </div>
+        </div>
+        <div class="layui-card-body">
+            <div>
+                <button class="layui-btn" data-type="del">删除</button>
+                <button class="layui-btn" data-type="add">添加</button>
             </div>
-            <div class="layui-card-body">
-                <table class="layui-table" id="test" lay-filter="test"></table>
-            </div>
+            <table class="layui-table" id="test" lay-filter="test"></table>
         </div>
     </div>
 </div>
@@ -37,9 +37,9 @@
     var curr_page = 1;
     //搜索
     function search(curr) {
-        var keyword = $('#keyword').val();
+        var title = $('#title').val();
         //执行重载
-        table.reload('test', {page: {curr: curr}, where: { keyword:keyword}});
+        table.reload('test', {page: {curr: curr}, where: { title:title}});
     }
 
     layui.use(['laydate', 'table'], function() {
@@ -50,7 +50,8 @@
             ,url: '/admin/projectview/lists'
             ,page: true //开启分页
             ,cols: [[ //表头
-                {field: 'id', title: 'ID', width:60}
+                {type:'checkbox'}
+                ,{field: 'id', title: 'ID', width:60}
                 ,{field: 'title', title: '标题名称', width:250}
                 ,{field: 'member_id', title: '会员', width:150}
                 ,{field: 'project_ids', title: '项目'}
@@ -63,9 +64,13 @@
             }
         });
 
-        //新增
-        $("#table .add").click(function () {
-            edit("{:url('/admin/projectview/add')}", '新增项目页面');
+        $('.layui-btn').click(function () {
+            var type = $(this).data('type');
+            if(type == 'add'){
+                edit("{:url('/admin/projectview/add')}", '新增项目');
+            } else if(type == 'del'){
+                console.log('删除')
+            }
         });
 
         //监听行工具事件
