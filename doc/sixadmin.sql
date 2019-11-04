@@ -4,32 +4,16 @@ Navicat MySQL Data Transfer
 Source Server         : localhost_3306
 Source Server Version : 50505
 Source Host           : localhost:3306
-Source Database       : six
+Source Database       : sixadmin
 
 Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2019-09-16 11:45:08
+Date: 2019-11-04 15:01:24
 */
 
 SET FOREIGN_KEY_CHECKS=0;
-
--- ----------------------------
--- Table structure for k_config
--- ----------------------------
-DROP TABLE IF EXISTS `k_config`;
-CREATE TABLE `k_config` (
-  `id` int(11) NOT NULL,
-  `name` varchar(20) NOT NULL DEFAULT '' COMMENT '系统标题',
-  `copr` varchar(50) NOT NULL DEFAULT '' COMMENT '系统版权',
-  `home` varchar(120) NOT NULL DEFAULT '' COMMENT '主页地址',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='配置表';
-
--- ----------------------------
--- Records of k_config
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for k_member
@@ -87,14 +71,14 @@ CREATE TABLE `k_power` (
 INSERT INTO `k_power` VALUES ('1', '项目管理', '0', '', 'template-1', '0', '0', null, '100', null, '0');
 INSERT INTO `k_power` VALUES ('2', '系统管理', '0', '', 'set', '0', '0', null, '300', null, '0');
 INSERT INTO `k_power` VALUES ('3', '项目列表', '1', '/admin/project/lists', '', '0', '1562234444', null, '100', null, '0');
-INSERT INTO `k_power` VALUES ('4', '项目页面列表', '1', '/admin/projectview/lists', '', '0', '0', null, '200', null, '0');
+INSERT INTO `k_power` VALUES ('4', '项目页面列表', '1', '/admin/projectview/lists', '', '0', '1572848023', '1572848023', '200', null, '0');
 INSERT INTO `k_power` VALUES ('5', '用户管理', '2', '/admin/user/lists', '', '0', '0', null, '0', null, '0');
 INSERT INTO `k_power` VALUES ('7', '权限管理', '2', '/admin/power/lists', '', '0', '0', null, '0', null, '0');
 INSERT INTO `k_power` VALUES ('8', '角色管理', '2', '/admin/role/lists', '', '0', '0', null, '0', null, '0');
 INSERT INTO `k_power` VALUES ('9', '会员管理', '0', '', 'user', '0', '0', null, '200', null, '0');
 INSERT INTO `k_power` VALUES ('10', '会员列表', '9', '/admin/member/lists', '', '0', '0', null, '0', null, '0');
-INSERT INTO `k_power` VALUES ('11', '新增会员', '10', '/admin/member/add', '', '0', '0', null, '0', null, '1');
-INSERT INTO `k_power` VALUES ('12', '编辑会员', '10', '/admin/member/edit', '', '0', '0', null, '0', null, '1');
+INSERT INTO `k_power` VALUES ('11', '新增会员', '9', '/admin/member/add', '', '0', '1572847637', null, '0', null, '1');
+INSERT INTO `k_power` VALUES ('12', '编辑会员', '9', '/admin/member/edit', '', '0', '1572846651', null, '0', null, '1');
 INSERT INTO `k_power` VALUES ('13', '主页', '0', '', 'layui-icon-home', '1568254479', '1568254706', '1568254706', '0', null, '0');
 INSERT INTO `k_power` VALUES ('14', '控制台', '0', '/admin/index/home', '', '1568254615', '1568604085', null, '0', null, '1');
 
@@ -125,28 +109,6 @@ INSERT INTO `k_project` VALUES ('7', '56', '565463', '/uploads/project/20190318/
 INSERT INTO `k_project` VALUES ('8', '黄工一中', '2342', '/uploads/project/20190318/1d3ff09d7614d3b63542f871c77ae1be.jpg', '2342341', '0', '1568601515', null, '1');
 
 -- ----------------------------
--- Table structure for k_project_view
--- ----------------------------
-DROP TABLE IF EXISTS `k_project_view`;
-CREATE TABLE `k_project_view` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(25) COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '标题名称',
-  `member_id` int(11) NOT NULL DEFAULT '0' COMMENT '会员id',
-  `project_ids` varchar(50) COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '项目id',
-  `create_time` int(10) NOT NULL DEFAULT '0' COMMENT '创建时间',
-  `update_time` int(10) NOT NULL DEFAULT '0' COMMENT '更新时间',
-  `delete_time` int(10) DEFAULT NULL COMMENT '删除时间',
-  PRIMARY KEY (`id`),
-  KEY `ind_member_id` (`member_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='项目页面表';
-
--- ----------------------------
--- Records of k_project_view
--- ----------------------------
-INSERT INTO `k_project_view` VALUES ('1', '23', '2', '234', '1552966262', '1553751442', null);
-INSERT INTO `k_project_view` VALUES ('2', '213324', '5', '123', '1554359731', '1554360196', null);
-
--- ----------------------------
 -- Table structure for k_role
 -- ----------------------------
 DROP TABLE IF EXISTS `k_role`;
@@ -165,9 +127,38 @@ CREATE TABLE `k_role` (
 -- ----------------------------
 -- Records of k_role
 -- ----------------------------
-INSERT INTO `k_role` VALUES ('4', '普通员工', '', '1553764483', '1553764483', null, '0', '');
-INSERT INTO `k_role` VALUES ('5', '测试', '', '1553764492', '1555486328', null, '0', '1,3,2,7,8,9,10,11,12');
-INSERT INTO `k_role` VALUES ('6', '管理员', '测试', '1553764500', '1555474310', null, '0', '1,3,9,10,11,12');
+INSERT INTO `k_role` VALUES ('4', '普通员工', '', '1553764483', '1572847664', '1572847664', '0', '');
+INSERT INTO `k_role` VALUES ('5', '测试', '测试', '1553764492', '1572847677', null, '0', '1,3,2,7,8,9,10,11,12');
+INSERT INTO `k_role` VALUES ('6', '管理员', '测试', '1553764500', '1572847672', '1572847672', '0', '1,3,9,10,11,12');
+
+-- ----------------------------
+-- Table structure for k_score
+-- ----------------------------
+DROP TABLE IF EXISTS `k_score`;
+CREATE TABLE `k_score` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(25) COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '会员名称',
+  `number` varchar(50) COLLATE utf8_bin DEFAULT '' COMMENT '机器号',
+  `score` int(10) DEFAULT '0' COMMENT '分数',
+  `create_time` int(10) NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `update_time` int(10) NOT NULL DEFAULT '0' COMMENT '更新时间',
+  `delete_time` int(10) DEFAULT NULL COMMENT '删除时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='分数';
+
+-- ----------------------------
+-- Records of k_score
+-- ----------------------------
+INSERT INTO `k_score` VALUES ('1', '刘德华', '252525@qq.com', '0', '0', '1552964957', null);
+INSERT INTO `k_score` VALUES ('2', '长221', '', '0', '1553139563', '1555986595', '1555986595');
+INSERT INTO `k_score` VALUES ('3', '刘', '', '0', '1553139570', '1555986599', '1555986599');
+INSERT INTO `k_score` VALUES ('4', '213', '', '0', '1553150214', '1555986709', '1555986709');
+INSERT INTO `k_score` VALUES ('5', '2432', '', '0', '1553823544', '1555986603', '1555986603');
+INSERT INTO `k_score` VALUES ('6', '123', '', '0', '1553823554', '1553827539', '1553827539');
+INSERT INTO `k_score` VALUES ('7', '234', '', '0', '1553823571', '1553827458', '1553827458');
+INSERT INTO `k_score` VALUES ('8', '345', '', '0', '1553823588', '1553827454', '1553827454');
+INSERT INTO `k_score` VALUES ('9', '234', '', '0', '1553849581', '1555986607', '1555986607');
+INSERT INTO `k_score` VALUES ('10', '刘烨', '5656@qq.com', '0', '1562234942', '1562234953', null);
 
 -- ----------------------------
 -- Table structure for k_user

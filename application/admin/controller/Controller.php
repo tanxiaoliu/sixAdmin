@@ -46,6 +46,8 @@ class Controller extends \think\Controller
     {
         // 当前路由信息
         $this->getRouteInfo();
+        $admin = config('admin');
+        $this->assign('admin', $admin);
         if($this->controller != 'login') {
             // 后台用户登录信息
             $this->user = Session::get('admin_user.user');

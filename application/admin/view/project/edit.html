@@ -6,42 +6,55 @@
                 <div class="layui-card-header">编辑{$data.project_name}</div>
                 <div class="layui-card-body" id="alert_form">
                     <form class="layui-form" action="" lay-filter="alert">
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">项目名称</label>
-                            <div class="layui-input-block">
-                                <input type="text" name="project_name" value="{$data.project_name|default=''}" autocomplete="off" lay-verify="required" class="layui-input">
+
+                        <div class="layui-row layui-col-space10 layui-form-item">
+                            <div class="layui-col-lg4">
+                                <label class="layui-form-label">项目名称</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="project_name" value="{$data.project_name|default=''}" lay-verify="required" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-col-lg4">
+                                <label class="layui-form-label">所属会员</label>
+                                <div class="layui-input-block">
+                                    <select name="member_id" lay-verify="required" lay-search="">
+                                        <option value="">直接选择或搜索选择</option>
+                                        {volist name="memberList" id="vo"}
+                                        <option value="{$vo.id}" {if condition="$data and ($data.member_id eq $vo.id)"} selected{/if} >{$vo.member_name}</option>
+                                        {/volist}
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">所属会员</label>
-                            <div class="layui-input-inline">
-                                <select name="member_id" lay-verify="required" lay-search="">
-                                    <option value="">直接选择或搜索选择</option>
-                                    {volist name="memberList" id="vo"}
-                                    <option value="{$vo.id}" {if condition="$data and ($data.member_id eq $vo.id)"} selected{/if} >{$vo.member_name}</option>
-                                    {/volist}
-                                </select>
+
+                        <div class="layui-row layui-col-space10 layui-form-item">
+                            <div class="layui-col-lg8">
+                                <label class="layui-form-label">标签</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="project_name" value="{$data.tag|default=''}" lay-verify="required" class="layui-input">
+                                </div>
                             </div>
                         </div>
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">标签</label>
-                            <div class="layui-input-block">
-                                <input type="text" name="tag" value="{$data.tag|default=''}" autocomplete="off" class="layui-input">
+
+                        <div class="layui-row layui-col-space10 layui-form-item">
+                            <div class="layui-col-lg8">
+                                <label class="layui-form-label">项目封面图</label>
+                                <div class="layui-input-block">
+                                    <span id="fengmian"><img src="__STATIC__{$data.cover|default='/admin/images/default.jpg'}" width="80" height="80"></span>
+                                    <a class="layui-btn" id="sc">上传封面</a>
+                                </div>
                             </div>
                         </div>
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">项目封面图</label>
-                            <div class="layui-input-block">
-                                <span id="fengmian"><img src="__STATIC__{$data.cover|default='/admin/images/default.jpg'}" width="80" height="80"></span>
-                                <a class="layui-btn" id="sc">上传封面</a>
+
+                        <div class="layui-row layui-col-space10 layui-form-item">
+                            <div class="layui-col-lg8">
+                                <label class="layui-form-label">项目路径</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="project_name" value="{$data.path|default=''}" lay-verify="required" class="layui-input">
+                                </div>
                             </div>
                         </div>
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">项目路径</label>
-                            <div class="layui-input-block">
-                                <input type="text" name="path" value="{$data.path|default=''}" autocomplete="off" lay-verify="required" class="layui-input">
-                            </div>
-                        </div>
+
                         <div class="layui-form-item">
                             <div class="layui-input-block">
                                 <button class="layui-btn" lay-submit lay-filter="save">保存</button>

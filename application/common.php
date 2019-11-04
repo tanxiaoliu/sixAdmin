@@ -235,3 +235,20 @@ function array_children_count($array, $pid)
     }
     return $counter;
 }
+
+/**
+ * 生成二维码
+ * @param string $url
+ * @param bool $filename
+ * @param string $level
+ * @param int $size
+ * 纠错级别：L、M、Q、H
+ * 点的大小：1到10,用于手机端4就可以了
+ */
+function qrcode($url = "", $filename = false, $level = 'H', $size = 8)
+{
+    header('Content-Type: image/png');
+    vendor("phpqrcode.phpqrcode");//引入工具包
+    $qRcode = new \QRcode();
+    $qRcode->png($url, $filename, $level, $size);
+}

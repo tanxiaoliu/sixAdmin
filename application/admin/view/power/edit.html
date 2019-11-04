@@ -31,6 +31,19 @@
             </div>
         </div>
         <div class="layui-form-item">
+            <label class="layui-form-label">排序</label>
+            <div class="layui-input-block">
+                <input type="text" name="sort" value="{$data.sort|default=''}" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">单选框</label>
+            <div class="layui-input-block">
+                <input type="radio" name="type" value="0" title="菜单" {if condition="$data.type eq 0"}checked=""{/if}>
+                <input type="radio" name="type" value="1" title="按钮" {if condition="$data.type eq 1"}checked=""{/if}>
+            </div>
+        </div>
+        <div class="layui-form-item">
             <div class="layui-input-block">
                 <button class="layui-btn" lay-submit lay-filter="save">保存</button>
                 <button type="reset" class="layui-btn layui-btn-primary">重置</button>

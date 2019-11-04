@@ -240,4 +240,11 @@ return [
         'var_page'  => 'page',
         'list_rows' => 15,
     ],
+
+    //平台配置
+    'admin'               => [
+        'name'      => 'XX管理平台',
+        'company'   => 'XX公司',
+        'url'       => '#',
+    ],
 ];
