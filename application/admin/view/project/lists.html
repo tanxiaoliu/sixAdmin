@@ -51,10 +51,17 @@
 </script>
 <script type="text/html" id="optTpl">
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    <!--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
 </script>
 <script type="text/javascript">
     var curr_page = 1;
+
+    $(document).keyup(function(event){
+        if(event.keyCode ==13){
+            search();
+        }
+    });
+
     //搜索
     function search(curr) {
         var create_time = $('#create_time').val();
@@ -98,7 +105,7 @@
             if(type == 'add'){
                 edit("{:url('/admin/project/add')}", '新增项目');
             } else if(type == 'del'){
-                console.log('删除')
+                // console.log('删除')
             }
         });
 
@@ -106,12 +113,31 @@
         table.on('tool(test)', function(obj){
             var data = obj.data;
             if(obj.event === 'del'){
-                deleted("{:url('admin/project/delete')}", obj)
+                // deleted("{:url('admin/project/delete')}", obj)
             } else if(obj.event === 'edit'){
                 // edit("{:url('/admin/project/edit/id/"+ data.id +"')}", '编辑' + data.project_name);
                 window.parent.open_tab('编辑' + data.project_name,"{:url('/admin/project/edit/id/"+ data.id +"')}");
             }
         });
+
+        $('#del').click(function () {
+            var checkStatus = table.checkStatus('test')
+                , data = checkStatus.data;
+            if (data.length == 0) {
+                layer.msg("请选择行", {icon: 5, time: 2000});
+            } else if (data.length > 0) {
+                var ids = [];
+                for (var i = 0; i < data.length; i++) {
+                    // if(data[i].status > 0){
+                    //     layer.msg(data[i].title+"还在建模中，不能审核",{icon:5,time:2000});
+                    //     return;
+                    // }
+                    ids.push(data[i].id);
+                }
+                deletedAll("{:url('admin/project/delete')}", ids)
+            }
+        });
+
     });
 </script>
 </body>

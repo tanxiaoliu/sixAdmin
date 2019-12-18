@@ -60,6 +60,5 @@
         var post = obj.field;
         post.id = "{$data.id|default=''}";
         submitPost('{:url("admin/user/edit")}', post);
-        return false;
     });
 </script>

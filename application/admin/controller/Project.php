@@ -104,10 +104,25 @@ class Project extends Controller
      * @return array
      * @throws \think\exception\DbException
      */
+//    function delete($id)
+//    {
+//        $model = ProjectModel::detail($id);
+//        if(!$model->remove()) {
+//            return $this->renderError('删除失败');
+//        }
+//        return $this->renderSuccess('删除成功');
+//    }
+
+    /**
+     * 批量删除
+     * @param $id
+     * @return array
+     */
     function delete($id)
     {
-        $model = ProjectModel::detail($id);
-        if(!$model->remove()) {
+        $ids = json_decode($id, true);
+        $model = new ProjectModel();
+        if(!$model->where('id', 'in', $ids)->delete()) {
             return $this->renderError('删除失败');
         }
         return $this->renderSuccess('删除成功');

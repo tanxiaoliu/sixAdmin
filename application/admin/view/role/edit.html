@@ -15,11 +15,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">状态</label>
             <div class="layui-input-block">
-                {if condition="$data"}
-                    <input type="checkbox" {if condition="$data.status eq 0"}checked{/if} name="status" lay-skin="switch" lay-text="正常|禁用">
-                {else /}
-                    <input type="checkbox" name="status" checked lay-skin="switch" lay-text="正常|禁用">
-                {/if}
+                <input type="checkbox" name="status" {if condition="$data.status eq 0"}checked{/if} lay-skin="switch" lay-text="正常|禁用">
             </div>
         </div>
         <div class="layui-form-item">
@@ -35,7 +31,11 @@
     form.on('submit(save)', function (obj) {
         var post = obj.field;
         post.id = "{$data.id|default=''}";
+        if(post.status == 'on'){
+            post.status = 0;
+        } else {
+            post.status = 1;
+        }
         submitPost('{:url("admin/role/edit")}', post);
-        return false;
     });
 </script>

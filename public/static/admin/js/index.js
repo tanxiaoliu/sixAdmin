@@ -36,6 +36,34 @@ function deleted(url, obj) {
 }
 
 /**
+ * 批量删除
+ * @param url
+ * @param ids
+ */
+function deletedAll(url, ids) {
+    layer.confirm('真的删除行么', function(index){
+        $.ajax({
+            type: 'POST',
+            url: url,
+            dataType: 'json',
+            data: {
+                id: ids
+            },
+            success: function (data) {
+                if(data.code == 0 && data.wait != 3){
+                    layer.msg(data.msg,{icon:6,time:2000}, function(){
+                        layer.closeAll();
+                    });
+                    search();
+                } else{
+                    layer.msg(data.msg,{icon:5,time:2000})
+                }
+            }
+        });
+    });
+}
+
+/**
  * 跳转添加页面的公共方法
  * @param url
  * @returns {boolean}
@@ -58,7 +86,7 @@ function add(url, title) {
  * @param post
  * @param status
  */
-function submitPost(url, post, status) {
+function submitPost(url, post) {
     $.ajax({
         type: 'POST',
         url: url,
@@ -70,9 +98,7 @@ function submitPost(url, post, status) {
             if (data.code == 0) {
                 layer.msg(data.msg, {icon: 6, time: 2000}, function () {
                     layer.closeAll();
-                    if(status == '') {
-                        search();
-                    }
+                    search();
                 })
             } else {
                 layer.msg(data.msg, {icon: 5, time: 2000})
