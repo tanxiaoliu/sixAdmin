@@ -49,8 +49,6 @@ class Controller extends \think\Controller
         $admin = config('admin');
         $this->assign('admin', $admin);
         if($this->controller != 'login') {
-            // 后台用户登录信息
-            $this->user = Session::get('admin_user.user');
             // 验证登录
             $this->checkAccess();
             $this->assign('menus', json_encode($this->menus));
@@ -90,11 +88,23 @@ class Controller extends \think\Controller
      */
     private function checkAccess()
     {
+        // 后台用户登录信息
+        $this->user = Session::get('admin_user.user');
         // 验证当前模块是否是admin
-        if (($this->request->module() != 'admin' || !Session::has('admin_user'))) {
+        if (($this->request->module() != 'admin' || $this->user)) {
             $this->redirect('Login/index');
             return false;
         } else {
+             // 更新过期时间
+             if (time() - $this->user['time'] > 5400) {
+                Session::set('admin_user', [
+                    'user' => [
+                        'user_id' => $this->user['id'],
+                        'nickname' => $this->user['nickname'],
+                        'time' => time(),
+                    ]
+                ]);
+            }
             //获取用户菜单
             $this->menus();
             // 如果用户id是1，则无需判断

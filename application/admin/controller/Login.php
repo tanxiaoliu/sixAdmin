@@ -3,7 +3,6 @@ namespace app\admin\controller;
 
 use think\captcha\Captcha;
 use think\Cookie;
-use think\Log;
 use think\Session;
 use app\admin\model\User as UserModel;
 
@@ -41,6 +40,7 @@ class Login extends Controller
                     'user' => [
                         'user_id' => $user['id'],
                         'nickname' => $user['nickname'],
+                        'time' => time(),
                     ]
                 ]);
                 //记住密码7天
