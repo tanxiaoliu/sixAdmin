@@ -94,6 +94,9 @@ class Controller extends \think\Controller
         if (($this->request->module() != 'admin' || $this->user)) {
             $this->redirect('Login/index');
             return false;
+        } elseif (time() - $this->user['time'] > 7200) {
+            $this->redirect('Login/index');
+            return false;
         } else {
              // 更新过期时间
              if (time() - $this->user['time'] > 5400) {
