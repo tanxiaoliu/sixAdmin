@@ -91,7 +91,7 @@ class Controller extends \think\Controller
         // 后台用户登录信息
         $this->user = Session::get('admin_user.user');
         // 验证当前模块是否是admin
-        if (($this->request->module() != 'admin' || $this->user)) {
+        if (($this->request->module() != 'admin' || !$this->user)) {
             $this->redirect('Login/index');
             return false;
         } elseif (time() - $this->user['time'] > 7200) {
