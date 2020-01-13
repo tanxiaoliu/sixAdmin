@@ -115,12 +115,11 @@ class Project extends Controller
 
     /**
      * 批量删除
-     * @param $id
      * @return array
      */
-    function delete($id)
+    function delete()
     {
-        $ids = json_decode($id, true);
+        $ids = input('id/a', []);
         $model = new ProjectModel();
         if(!$model->where('id', 'in', $ids)->delete()) {
             return $this->renderError('删除失败');
