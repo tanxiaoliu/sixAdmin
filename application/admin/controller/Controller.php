@@ -102,7 +102,7 @@ class Controller extends \think\Controller
              if (time() - $this->user['time'] > 5400) {
                 Session::set('admin_user', [
                     'user' => [
-                        'user_id' => $this->user['id'],
+                        'user_id' => $this->user['user_id'],
                         'nickname' => $this->user['nickname'],
                         'time' => time(),
                     ]
