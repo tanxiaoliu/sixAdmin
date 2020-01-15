@@ -1,63 +1,66 @@
 {include file="admin@public/header" /}
-<body class="layui-layout-body"><div class="layui-layout layui-layout-admin">
-    <div class="layui-header">
-        <!-- 头部区域 -->
-        <ul class="layui-nav layui-layout-left">
-           <li class="layui-nav-item layadmin-flexible" lay-unselect="">
-                <a href="javascript:flexible();" layadmin-event="flexible" title="侧边伸缩">
-                    <i class="layui-icon layui-icon-shrink-right" id="LAY_app_flexible"></i>
-                </a>
-            </li>
-            <li class="layui-nav-item layui-hide-xs" lay-unselect="">
-                <a href="#" target="_blank">
-                    <i class="layui-icon layui-icon-website"></i> 网站
-                </a>
-            </li>
-            <li class="layui-nav-item" lay-unselect="">
-                <a href="javascript:refresh();">
-                    <i class="layui-icon layui-icon-refresh"></i> 刷新
-                </a>
-            </li>
-        </ul>
-        <ul class="layui-nav layui-layout-right" lay-filter="layadmin-layout-right">
-            <li class="layui-nav-item" lay-unselect="">
-                <a href="javascript:;"><i class="layui-icon layui-icon-username"></i> {$user.nickname}</a>
-            </li>
-            <li class="layui-nav-item" lay-unselect="">
-                <a href="{:url('admin/login/logout')}">退出</a>
-            </li>
-        </ul>
-    </div>
 
-    <!-- 侧边菜单 -->
-    <div class="layui-side layui-side-menu">
-        <div class="layui-side-scroll">
-            <div class="layui-logo" lay-href=""><span>{$admin.name}</span></div>
-            <ul class="layui-nav layui-nav-tree " lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
+<body class="layui-layout-body">
+    <div class="layui-layout layui-layout-admin">
+        <div class="layui-header">
+            <!-- 头部区域 -->
+            <ul class="layui-nav layui-layout-left">
+                <li class="layui-nav-item layadmin-flexible" lay-unselect="">
+                    <a href="javascript:flexible();" layadmin-event="flexible" title="侧边伸缩">
+                        <i class="layui-icon layui-icon-shrink-right" id="LAY_app_flexible"></i>
+                    </a>
+                </li>
+                <li class="layui-nav-item layui-hide-xs" lay-unselect="">
+                    <a href="#" target="_blank">
+                        <i class="layui-icon layui-icon-website"></i> 网站
+                    </a>
+                </li>
+                <li class="layui-nav-item" lay-unselect="">
+                    <a href="javascript:refresh();">
+                        <i class="layui-icon layui-icon-refresh"></i> 刷新
+                    </a>
+                </li>
+            </ul>
+            <ul class="layui-nav layui-layout-right" lay-filter="layadmin-layout-right">
+                <li class="layui-nav-item" lay-unselect="">
+                    <a href="javascript:;"><i class="layui-icon layui-icon-username"></i> {$user.nickname}</a>
+                </li>
+                <li class="layui-nav-item" lay-unselect="">
+                    <a href="{:url('admin/login/logout')}">退出</a>
+                </li>
             </ul>
         </div>
-    </div>
 
-    <!-- 页面标签 -->
-    <div class="layui-tab" lay-unauto="" lay-allowclose="true" lay-filter="layadmin-layout-tabs">
-        <ul class="layui-tab-title layadmin-pagetabs" id="LAY_app_tabsheader">
-            <li lay-id="/" class="layui-this"><i class="layui-icon layui-icon-home"></i></li>
-        </ul>
-        <!-- tabcontent内容 -->
-        <div class="layui-body layui-tab-content" id="LAY_app_body">
-            <div class="layui-tab-item layui-show">
-              <iframe src="/admin/index/home"></iframe>
+        <!-- 侧边菜单 -->
+        <div class="layui-side layui-side-menu">
+            <div class="layui-side-scroll">
+                <div class="layui-logo" lay-href=""><span>{$admin.name}</span></div>
+                <ul class="layui-nav layui-nav-tree " lay-shrink="all" id="LAY-system-side-menu"
+                    lay-filter="layadmin-system-side-menu">
+                </ul>
             </div>
         </div>
-        <!-- tabcontent end -->
+
+        <!-- 页面标签 -->
+        <div class="layui-tab" lay-unauto="" lay-allowclose="true" lay-filter="layadmin-layout-tabs">
+            <ul class="layui-tab-title layadmin-pagetabs" id="LAY_app_tabsheader">
+                <li lay-id="/" class="layui-this"><i class="layui-icon layui-icon-home"></i></li>
+            </ul>
+            <!-- tabcontent内容 -->
+            <div class="layui-body layui-tab-content" id="LAY_app_body">
+                <div class="layui-tab-item layui-show">
+                    <iframe src="/admin/index/home"></iframe>
+                </div>
+            </div>
+            <!-- tabcontent end -->
+        </div>
+
+        <!-- 辅助元素，一般用于移动设备下遮罩 -->
+        <div class="layadmin-body-shade" layadmin-event="shade"></div>
     </div>
 
-    <!-- 辅助元素，一般用于移动设备下遮罩 -->
-    <div class="layadmin-body-shade" layadmin-event="shade"></div>
-</div>
-
-<!-- 菜单模版 -->
-<script type="text/html" id="navTpl">
+    <!-- 菜单模版 -->
+    <script type="text/html" id="navTpl">
     {{#  layui.each(d, function(index, item){ }}
     <li class="layui-nav-item">
         <a href="javascript:;">
@@ -73,109 +76,127 @@
     {{#  }); }}
 </script>
 
-<script>
-    var form,element,layer,layedit,table,laydate;
-    var tabArray = new Array();
-    layui.use(['form','layer','table','element','laytpl','layedit','laydate'], function() {
-        element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
-        layer = layui.layer;
-        form = layui.form;
-        layedit = layui.layedit;
-        table = layui.table;
-        laydate = layui.laydate;
-        var laytpl = layui.laytpl;
+    <script>
+        var form, element, layer, layedit, table, laydate;
+        var tabArray = new Array();
+        layui.use(['form', 'layer', 'table', 'element', 'laytpl', 'layedit', 'laydate'], function () {
+            element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+            layer = layui.layer;
+            form = layui.form;
+            layedit = layui.layedit;
+            table = layui.table;
+            laydate = layui.laydate;
+            var laytpl = layui.laytpl;
 
-        //左侧菜单
-        var navdata = {$menus};
-        var getTpl = navTpl.innerHTML, navdom = document.getElementById('LAY-system-side-menu');
-        laytpl(getTpl).render(navdata, function (html) {
-            navdom.innerHTML = html;
-            element.render('nav');
+            //左侧菜单
+            var navdata = { $menus };
+            var getTpl = navTpl.innerHTML, navdom = document.getElementById('LAY-system-side-menu');
+            laytpl(getTpl).render(navdata, function (html) {
+                navdom.innerHTML = html;
+                element.render('nav');
+            });
+
+            //打开页面
+            $(".layui-nav-child a").click(function () {
+                flexible(1);
+                var _this = $(this);
+                var title = _this.text();
+                var url = _this.attr('data-url');
+                open_tab(title, url);
+            });
+
+            //监听页面关闭
+            element.on('tabDelete(layadmin-layout-tabs)', function (data) {
+                tabArray.splice(data.index - 1, 1);
+            });
+
         });
 
-        //打开页面
-        $(".layui-nav-child a").click(function () {
+        //左侧收缩
+        function flexible(type) {
+            var dom = $('.layui-layout-body');
+            var flexible = $('#LAY_app_flexible');
+            if (document.body.clientWidth < 993) {
+                var str = 'layadmin-side-spread-sm';
+            } else {
+                var str = 'layadmin-side-shrink';
+            }
+            if (dom.hasClass(str) || type == 1) {
+                dom.removeClass(str);
+                flexible.addClass('layui-icon-shrink-right');
+                flexible.removeClass('layui-icon-spread-left');
+            } else {
+                dom.addClass(str);
+                flexible.removeClass('layui-icon-shrink-right');
+                flexible.addClass('layui-icon-spread-left');
+            }
+        }
+        $('#LAY-system-side-menu').click(function () {
+            if (document.body.clientWidth > 993) {
+                flexible(1);
+            }
+        });
+        $('.layui-logo').click(function () {
             flexible(1);
-            var _this = $(this);
-            var title = _this.text();
-            var url = _this.attr('data-url');
-            open_tab(title, url);
         });
-
-        //监听页面关闭
-        element.on('tabDelete(layadmin-layout-tabs)', function (data) {
-            tabArray.splice(data.index - 1, 1);
-        });
-
-    });
-
-    //左侧收缩
-    function flexible(type) {
-        var dom = $('.layui-layout-body');
-        var flexible = $('#LAY_app_flexible');
-        if (document.body.clientWidth < 993) {
-            var str = 'layadmin-side-spread-sm';
-        } else {
-            var str = 'layadmin-side-shrink';
-        }
-        if (dom.hasClass(str) || type == 1) {
-            dom.removeClass(str);
-            flexible.addClass('layui-icon-shrink-right');
-            flexible.removeClass('layui-icon-spread-left');
-        } else {
-            dom.addClass(str);
-            flexible.removeClass('layui-icon-shrink-right');
-            flexible.addClass('layui-icon-spread-left');
-        }
-    }
-    $('#LAY-system-side-menu').click(function () {
-        if (document.body.clientWidth > 993) {
+        $('.layadmin-body-shade').click(function () {
             flexible(1);
+        });
+
+        //刷新
+        function refresh() {
+            var dom = $('.layui-tab-item.layui-show').find("iframe");
+            if (!dom[0]) return;
+            var refreshing = layer.load();
+            var src = dom.prop('src');
+            dom.prop('src', src);
+            dom[0].onload = function () {
+                layer.close(refreshing);
+            }
         }
-    });
-    $('.layui-logo').click(function () {
-        flexible(1);
-    });
-    $('.layadmin-body-shade').click(function () {
-        flexible(1);
-    });
 
-    //刷新
-    function refresh() {
-        var dom = $('.layui-tab-item.layui-show').find("iframe");
-        if(!dom[0]) return;
-        var refreshing = layer.load();
-        var src = dom.prop('src');
-        dom.prop('src',src);
-        dom[0].onload = function(){
-            layer.close(refreshing);
+        //打开选项卡
+        function open_tab(title, url) {
+            if ($.inArray(title, tabArray) == -1) {
+                tabArray.push(title);
+                var iframeID = tabArray.length;
+                var loading = layer.load(); //加载动画
+                element.tabAdd('layadmin-layout-tabs', {
+                    title: title,
+                    content: '<iframe src="' + url + '" id="iframe' + iframeID + '"></iframe>',
+                    id: title
+                });
+                element.tabChange('layadmin-layout-tabs', title);
+
+                //关掉加载动画
+                var iframe = document.getElementById('iframe' + iframeID);
+                iframe.onload = function () {
+                    layer.close(loading);
+                };
+
+            } else {
+                element.tabChange('layadmin-layout-tabs', title);
+            }
         }
-    }
 
-    //打开选项卡
-    function open_tab(title,url){
-      if($.inArray(title,tabArray) == -1){
-          tabArray.push(title);
-          var iframeID = tabArray.length;
-          var loading = layer.load(); //加载动画
-          element.tabAdd('layadmin-layout-tabs', {
-              title: title,
-              content: '<iframe src="'+url+'" id="iframe'+iframeID+'"></iframe>',
-              id: title
-          });
-          element.tabChange('layadmin-layout-tabs',title);
-
-          //关掉加载动画
-          var iframe = document.getElementById('iframe'+iframeID);
-          iframe.onload = function(){     
-            layer.close(loading);
-          };
-
-      }else{
-        element.tabChange('layadmin-layout-tabs',title);
-      }
-    }
-</script>
+        //打开选项卡
+        function open_tab1(title, url) {
+            if ($.inArray(title, tabArray) == -1) {
+                tabArray.push(title);
+                var iframeID = tabArray.length;
+                element.tabAdd('layadmin-layout-tabs', {
+                    title: title,
+                    content: '<iframe src="' + url + '" id="iframe' + iframeID + '"></iframe>',
+                    id: title
+                });
+                element.tabChange('layadmin-layout-tabs', title);
+            } else {
+                element.tabDelete('layadmin-layout-tabs', title);
+                open_tab1(title, url);
+            }
+        }
+    </script>
 
 </body>
+
 </html>
