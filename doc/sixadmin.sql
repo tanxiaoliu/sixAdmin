@@ -2,15 +2,15 @@
 Navicat MySQL Data Transfer
 
 Source Server         : localhost_3306
-Source Server Version : 50505
+Source Server Version : 50726
 Source Host           : localhost:3306
 Source Database       : sixadmin
 
 Target Server Type    : MYSQL
-Target Server Version : 50505
+Target Server Version : 50726
 File Encoding         : 65001
 
-Date: 2019-11-04 15:01:24
+Date: 2020-02-12 17:34:27
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -63,7 +63,7 @@ CREATE TABLE `k_power` (
   `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '权限类型:菜单0 按钮1',
   PRIMARY KEY (`id`),
   KEY `ind_type_parent_id` (`type`,`parent_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='权限表';
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='权限表';
 
 -- ----------------------------
 -- Records of k_power
@@ -75,12 +75,14 @@ INSERT INTO `k_power` VALUES ('4', '项目页面列表', '1', '/admin/projectvie
 INSERT INTO `k_power` VALUES ('5', '用户管理', '2', '/admin/user/lists', '', '0', '0', null, '0', null, '0');
 INSERT INTO `k_power` VALUES ('7', '权限管理', '2', '/admin/power/lists', '', '0', '0', null, '0', null, '0');
 INSERT INTO `k_power` VALUES ('8', '角色管理', '2', '/admin/role/lists', '', '0', '0', null, '0', null, '0');
-INSERT INTO `k_power` VALUES ('9', '会员管理', '0', '', 'user', '0', '0', null, '200', null, '0');
-INSERT INTO `k_power` VALUES ('10', '会员列表', '9', '/admin/member/lists', '', '0', '0', null, '0', null, '0');
-INSERT INTO `k_power` VALUES ('11', '新增会员', '9', '/admin/member/add', '', '0', '1572847637', null, '0', null, '1');
-INSERT INTO `k_power` VALUES ('12', '编辑会员', '9', '/admin/member/edit', '', '0', '1572846651', null, '0', null, '1');
-INSERT INTO `k_power` VALUES ('13', '主页', '0', '', 'layui-icon-home', '1568254479', '1568254706', '1568254706', '0', null, '0');
+INSERT INTO `k_power` VALUES ('9', '会员管理', '0', '', 'user', '0', '1581499714', null, '200', null, '0');
+INSERT INTO `k_power` VALUES ('10', '会员列表', '9', '/admin/member/lists', '', '0', '1581499722', null, '0', null, '0');
+INSERT INTO `k_power` VALUES ('11', '新增会员', '9', '/admin/member/add', '', '0', '1581499725', null, '0', null, '1');
+INSERT INTO `k_power` VALUES ('12', '编辑会员', '9', '/admin/member/edit', '', '0', '1581499729', null, '0', null, '1');
 INSERT INTO `k_power` VALUES ('14', '控制台', '0', '/admin/index/home', '', '1568254615', '1568604085', null, '0', null, '1');
+INSERT INTO `k_power` VALUES ('15', '添加项目', '1', '/admin/project/add', '', '1581499786', '1581499786', null, '0', null, '1');
+INSERT INTO `k_power` VALUES ('16', '编辑项目', '1', '/admin/project/edit', '', '1581499805', '1581499805', null, '0', null, '1');
+INSERT INTO `k_power` VALUES ('17', '删除项目', '1', '/admin/project/delete', '', '1581499850', '1581499850', null, '0', null, '1');
 
 -- ----------------------------
 -- Table structure for k_project
