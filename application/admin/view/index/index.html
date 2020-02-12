@@ -152,29 +152,46 @@
         }
     }
 
-    //打开选项卡
-    function open_tab(title,url){
-      if($.inArray(title,tabArray) == -1){
-          tabArray.push(title);
-          var iframeID = tabArray.length;
-          var loading = layer.load(); //加载动画
-          element.tabAdd('layadmin-layout-tabs', {
-              title: title,
-              content: '<iframe src="'+url+'" id="iframe'+iframeID+'"></iframe>',
-              id: title
-          });
-          element.tabChange('layadmin-layout-tabs',title);
+     //打开选项卡
+     function open_tab(title, url) {
+            if ($.inArray(title, tabArray) == -1) {
+                tabArray.push(title);
+                var iframeID = tabArray.length;
+                var loading = layer.load(); //加载动画
+                element.tabAdd('layadmin-layout-tabs', {
+                    title: title,
+                    content: '<iframe src="' + url + '" id="iframe' + iframeID + '"></iframe>',
+                    id: title
+                });
+                element.tabChange('layadmin-layout-tabs', title);
 
-          //关掉加载动画
-          var iframe = document.getElementById('iframe'+iframeID);
-          iframe.onload = function(){     
-            layer.close(loading);
-          };
+                //关掉加载动画
+                var iframe = document.getElementById('iframe' + iframeID);
+                iframe.onload = function () {
+                    layer.close(loading);
+                };
 
-      }else{
-        element.tabChange('layadmin-layout-tabs',title);
-      }
-    }
+            } else {
+                element.tabChange('layadmin-layout-tabs', title);
+            }
+        }
+
+        //打开选项卡
+        function open_tab1(title, url) {
+            if ($.inArray(title, tabArray) == -1) {
+                tabArray.push(title);
+                var iframeID = tabArray.length;
+                element.tabAdd('layadmin-layout-tabs', {
+                    title: title,
+                    content: '<iframe src="' + url + '" id="iframe' + iframeID + '"></iframe>',
+                    id: title
+                });
+                element.tabChange('layadmin-layout-tabs', title);
+            } else {
+                element.tabDelete('layadmin-layout-tabs', title);
+                open_tab1(title, url);
+            }
+        }
 </script>
 
 </body>
