@@ -130,8 +130,8 @@
             if(obj.event === 'del'){
                 // deleted("{:url('admin/project/delete')}", obj)
             } else if(obj.event === 'edit'){
-                // edit("{:url('/admin/project/edit/id/"+ data.id +"')}", '编辑' + data.project_name);
-                window.parent.open_tab('编辑' + data.project_name,"{:url('/admin/project/edit/id/"+ data.id +"')}");
+                edit("{:url('/admin/project/edit/id/"+ data.id +"')}", '编辑' + data.project_name);
+                // window.parent.open_tab('编辑' + data.project_name,"{:url('/admin/project/edit/id/"+ data.id +"')}");
             }
         });
     });

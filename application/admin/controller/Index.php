@@ -24,7 +24,7 @@ class Index extends Controller
     function home()
     {
         //测试二维码生成
-        qrcode('https://www.baidu.com/', './static/qrcode/test.png');
+        // qrcode('https://www.baidu.com/', './static/qrcode/test.png');
         return view();
     }
 }
