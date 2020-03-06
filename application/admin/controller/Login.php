@@ -5,6 +5,8 @@ use think\captcha\Captcha;
 use think\Cookie;
 use think\Session;
 use app\admin\model\User as UserModel;
+use app\common\controller\Sms;
+use app\common\controller\Oss;
 
 /**
  * 后台登录
@@ -21,6 +23,9 @@ class Login extends Controller
      */
     function index(UserModel $userModel)
     {
+        // Sms::sendSms(13288481215);
+        // Oss::uploadFile('public/static/qrcode/test.png',  ROOT_PATH . 'public' . DS . 'static/qrcode/test.png');
+        
         if ($this->request->isPost()) {
             $post = $this->request->post();
             if (!captcha_check($post['captcha'])) {

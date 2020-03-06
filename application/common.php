@@ -116,7 +116,7 @@ function curl($url, $data = [])
     curl_setopt($curl, CURLOPT_URL, $url);
     curl_setopt($curl, CURLOPT_HEADER, false);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);//这个是重点。
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false); //这个是重点。
     $result = curl_exec($curl);
     curl_close($curl);
     return $result;
@@ -248,7 +248,7 @@ function array_children_count($array, $pid)
 function qrcode($url = "", $filename = false, $level = 'H', $size = 8)
 {
     header('Content-Type: image/png');
-    vendor("phpqrcode.phpqrcode");//引入工具包
+    vendor("phpqrcode.phpqrcode"); //引入工具包
     $qRcode = new \QRcode();
     $qRcode->png($url, $filename, $level, $size);
 }
