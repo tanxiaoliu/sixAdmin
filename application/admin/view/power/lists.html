@@ -35,6 +35,12 @@
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 <script type="text/javascript">
+    //搜索
+    function search(curr) {
+        window.location.reload();
+    }
+
+
     layui.use(['laydate', 'table'], function() {
         var table = layui.table;
         table.render({

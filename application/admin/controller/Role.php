@@ -76,6 +76,7 @@ class Role extends Controller
         ];
         $this->checkValidate($rule, $post);
         $model = new RoleModel;
+        $post['status'] = $post['status'] == 'on' ? 0 : 1;
         $id = isset($post['id']) ? $post['id'] : '';
         if (!$model->edit($id, $post)) {
             return $this->renderError('操作失败');
