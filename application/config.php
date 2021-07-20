@@ -54,7 +54,7 @@ return [
     // +----------------------------------------------------------------------
 
     // 默认模块名
-    'default_module'         => 'admin',
+    'default_module'         => 'index',
     // 禁止访问模块
     'deny_module_list'       => ['common'],
     // 默认控制器名
@@ -248,5 +248,18 @@ return [
         'name'      => 'XX管理平台',
         'company'   => 'XX公司',
         'url'       => '#',
+    ],
+
+     //阿里云短信
+    'sms'               => [
+        'AccessKeyID'      => 'LTAI4Fw2nHn881wrCsCUs388',
+        'AccessKeySecret'   => 'vtLu2FYeOnCLpJPDrZeKg8q2F53aZ6',
+    ],
+
+      //阿里云短信
+    'oss'               => [
+        'AccessKeyID'      => 'LTAI4Fw2nHn881wrCsCUs388',
+        'AccessKeySecret'   => 'vtLu2FYeOnCLpJPDrZeKg8q2F53aZ6',
+        'endpoint'   => 'http://oss-cn-beijing.aliyuncs.com',
     ],
 ];
