@@ -252,14 +252,14 @@ return [
 
      //阿里云短信
     'sms'               => [
-        'AccessKeyID'      => 'LTAI4Fw2nHn881wrCsCUs388',
-        'AccessKeySecret'   => 'vtLu2FYeOnCLpJPDrZeKg8q2F53aZ6',
+        'AccessKeyID'      => '',
+        'AccessKeySecret'   => '',
     ],
 
       //阿里云短信
     'oss'               => [
-        'AccessKeyID'      => 'LTAI4Fw2nHn881wrCsCUs388',
-        'AccessKeySecret'   => 'vtLu2FYeOnCLpJPDrZeKg8q2F53aZ6',
-        'endpoint'   => 'http://oss-cn-beijing.aliyuncs.com',
+        'AccessKeyID'      => '',
+        'AccessKeySecret'   => '',
+        'endpoint'   => '',
     ],
 ];

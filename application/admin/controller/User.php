@@ -74,13 +74,6 @@ class User extends Controller
      */
     function save($post)
     {
-        $rule = [
-            ['project_name','require|max:25','项目名称不能为空|项目名称最多不能超过25个字符'],
-            ['member_id','require','会员不能为空'],
-            ['cover','require','项目封面不能为空'],
-            ['path','require','项目路径不能为空']
-        ];
-        $this->checkValidate($rule, $post);
         $model = new UserModel;
         $id = isset($post['id']) ? $post['id'] : '';
         //判断超级管理员
