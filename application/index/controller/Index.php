@@ -194,14 +194,15 @@ class Index
         //parent_id icon
 
         //插入权限表
-        // $listdata = ['power_name' => $tablecomment[0]['comment'] . '列表', 'parent_id' => 0, 'uri' => '/admin/' . $name . '/lists', 'icon' => 'template-1', 'type' => 0];
-        // $powerid = Db::name('power')->insertGetId($listdata);
-        // $data = [
-        //     ['power_name' => '添加' . $tablecomment[0]['comment'], 'parent_id' => $powerid, 'uri' => '/admin/' . $name . '/add', 'type' => '1'],
-        //     ['power_name' => '编辑' . $tablecomment[0]['comment'], 'parent_id' => $powerid, 'uri' => '/admin/' . $name . '/edit', 'type' => '1'],
-        //     ['power_name' => '删除' . $tablecomment[0]['comment'], 'parent_id' => $powerid, 'uri' => '/admin/' . $name . '/delete', 'type' => '1']
-        // ];
-        // Db::name('power')->insertAll($data);
+        $listdata = ['power_name' => $tablecomment[0]['comment'] . '管理', 'parent_id' => 0, 'uri' => '', 'icon' => 'template-1', 'type' => 0];
+        $powerid = Db::name('power')->insertGetId($listdata);
+        $data = [
+            ['power_name' => '列表' . $tablecomment[0]['comment'], 'parent_id' => $powerid, 'uri' => '/admin/' . $name . '/lists', 'type' => '0'],
+            ['power_name' => '添加' . $tablecomment[0]['comment'], 'parent_id' => $powerid, 'uri' => '/admin/' . $name . '/add', 'type' => '1'],
+            ['power_name' => '编辑' . $tablecomment[0]['comment'], 'parent_id' => $powerid, 'uri' => '/admin/' . $name . '/edit', 'type' => '1'],
+            ['power_name' => '删除' . $tablecomment[0]['comment'], 'parent_id' => $powerid, 'uri' => '/admin/' . $name . '/delete', 'type' => '1']
+        ];
+        Db::name('power')->insertAll($data);
 
         echo 'ok';
     }
